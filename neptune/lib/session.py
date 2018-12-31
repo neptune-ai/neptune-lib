@@ -29,18 +29,21 @@ class Session(object):
 
 
 def main():
+    sample_api_token = "eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLnN0YWdlLm5lcHR1bmUubWwiLCJhcGlfa2V5" \
+                       "IjoiOTJhNzhiOWQtZTc3Ni00ODlhLWI5YzEtNzRkYmI1ZGVkMzAyIn0="
     class FakeCreds(object):
         def __init__(self):
             self.api_address = 'https://app.neptune.ml/api'
             self.api_token = ''
 
-    s = Session(FakeCreds())
+    s = Session(Credentials(sample_api_token))
+    # s = Session(FakeCreds())
     print('Session created.\n')
 
-    projects = s.get_projects('neptune-ml')
+    projects = s.get_projects('hubert3')
     print('Projects: {}\n'.format(projects))
 
-    project = projects['neptune-ml/Google-AI-Object-Detection-Challenge']
+    project = projects['hubert3/sandbox']
     members = project.get_members()
     print('Members: {}\n'.format(members))
 

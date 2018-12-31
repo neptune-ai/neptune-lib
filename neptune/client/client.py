@@ -1,7 +1,48 @@
+from bravado.requests_client import Authenticator
+from bravado.requests_client import RequestsClient
 from bravado.client import SwaggerClient
 from bravado_core.formatter import SwaggerFormat
+from requests.auth import AuthBase
 
 from neptune.model import LeaderboardEntry, Points
+
+
+class OAuthNoRefreshAuth(AuthBase):
+    # TODO add in-memory refresh-before-request mechanism
+
+    def __init__(self, access_token, refresh_token):
+        self.access_token = access_token
+        self.refresh_token = refresh_token
+
+    def __eq__(self, other):
+        return all([
+            self.access_token == getattr(other, 'access_token', None),
+            self.refresh_token == getattr(other, 'refresh_token', None)
+        ])
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __call__(self, r):
+        r.headers['Authorization'] = "Bearer {}".format(self.access_token)
+        return r
+
+
+class NeptuneAuthenticator(Authenticator):
+
+    def __init__(self):
+        super(NeptuneAuthenticator, self).__init__("")
+        self.auth = None
+
+    def set_auth(self, auth):
+        self.auth = auth
+
+    def matches(self, url):
+        return True if self.auth else False
+
+    def apply(self, request):
+        request.auth = self.auth
+        return request
 
 
 class Client(object):
@@ -9,20 +50,27 @@ class Client(object):
         self.api_address = api_address
         self.api_token = api_token
 
+        http_client = RequestsClient()
+        http_client.authenticator = NeptuneAuthenticator()
+
         self.backend_swagger_client = SwaggerClient.from_url(
-            '{}/backend/swagger.json'.format(self.api_address),
+            '{}/api/backend/swagger.json'.format(self.api_address),
             config=dict(
                 validate_swagger_spec=False,
-                formats=[uuid_format]))
+                formats=[uuid_format]),
+            http_client=http_client)
+
+        if api_token:
+            r = self.backend_swagger_client.api.exchangeApiToken(X_Neptune_Api_Token=api_token).response().result
+            http_client.authenticator.set_auth(OAuthNoRefreshAuth(r.accessToken, r.refreshToken))
 
         self.leaderboard_swagger_client = SwaggerClient.from_url(
-            '{}/leaderboard/swagger.json'.format(self.api_address),
+            '{}/api/leaderboard/swagger.json'.format(self.api_address),
             config=dict(
                 validate_swagger_spec=False,
                 validate_responses=False,  # TODO!!!
-                formats=[uuid_format]))
-        # TODO: !!!
-        self.leaderboard_swagger_client.swagger_spec.api_url = 'https://app.neptune.ml'
+                formats=[uuid_format]),
+            http_client=http_client)
 
     def get_projects(self, namespace):
         r = self.backend_swagger_client.api.listProjectsInOrganization(
@@ -39,8 +87,8 @@ class Client(object):
 
     def get_leaderboard_entries(self, namespace, project_name):
         def get_portion(limit, offset):
-            return self.leaderboard_swagger_client.api.projectLeaderboard(
-                organizationName=namespace, projectName=project_name,
+            return self.leaderboard_swagger_client.api.getLeaderboard(
+                projectIdentifier="{}/{}".format(namespace, project_name),
                 limit=limit, offset=offset
             ).response().result.entries
 
