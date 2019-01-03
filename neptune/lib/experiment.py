@@ -1,6 +1,7 @@
 from typing import Dict
 
 import pandas as pd
+from pandas.errors import EmptyDataError
 
 from neptune.utils import map_values
 
@@ -78,7 +79,11 @@ class Experiment(object):
 
         :return: A `pandas.DataFrame` containing the hardware utilization metrics throughout the experiment.
         """
-        return pd.read_csv(self._client.get_metrics_csv(self._leaderboard_entry.internal_id))
+        metrics_csv = self._client.get_metrics_csv(self._leaderboard_entry.internal_id)
+        try:
+            return pd.read_csv(metrics_csv)
+        except EmptyDataError:
+            return pd.DataFrame()
 
     def get_numeric_channels_values(self, *channel_names: str) -> pd.DataFrame:
         """
@@ -101,11 +106,16 @@ class Experiment(object):
         channels_data = {}
         for channel_name in channel_names:
             channel_id = self._leaderboard_entry.channels_dict_by_name[channel_name].id
-            channels_data[channel_name] = pd.read_csv(
-                self._client.get_channel_points_csv(self._leaderboard_entry.internal_id, channel_id),
-                header=None,
-                names=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
-            )
+            try:
+                channels_data[channel_name] = pd.read_csv(
+                    self._client.get_channel_points_csv(self._leaderboard_entry.internal_id, channel_id),
+                    header=None,
+                    names=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
+                )
+            except EmptyDataError:
+                channels_data[channel_name] = pd.DataFrame(
+                    columns=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
+                )
 
         return pd.concat(channels_data.values(), axis=1, sort=False)
 
