@@ -40,6 +40,9 @@ def main():
     # s = Session(FakeCreds())
     print('Session created.\n')
 
+    print('User profile:')
+    print(s._client.backend_swagger_client.api.getUserProfile().response().result)
+
     projects = s.get_projects('hubert3')
     print('Projects: {}\n'.format(projects))
 
