@@ -1,4 +1,5 @@
 from typing import Dict
+
 import pandas as pd
 
 from neptune.utils import map_values
@@ -68,7 +69,7 @@ class Experiment(object):
         E.g. For an experiment using a single GPU, this method will return a DataFrame
         of the following columns:
 
-        x_ram, y_ram, x_cpu, y_cpu, x_gpu_util_1, y_gpu_util_1, x_gpu_mem_1, y_gpu_mem_1
+        x_ram, y_ram, x_cpu, y_cpu, x_gpu_util_0, y_gpu_util_0, x_gpu_mem_0, y_gpu_mem_0
 
         The following values denote that after 3 seconds, the experiment used 16.7 GB of RAM.
         x_ram, y_ram = 3000, 16.7
@@ -77,7 +78,7 @@ class Experiment(object):
 
         :return: A `pandas.DataFrame` containing the hardware utilization metrics throughout the experiment.
         """
-        pass
+        return pd.read_csv(self._client.get_metrics_csv(self._leaderboard_entry.internal_id))
 
     def get_numeric_channels_values(self, *channel_names: str) -> pd.DataFrame:
         """
@@ -97,14 +98,16 @@ class Experiment(object):
         :return: A `pandas.DataFrame` containing the values for the requested channels.
         """
 
-        data = {}
+        channels_data = {}
         for channel_name in channel_names:
             channel_id = self._leaderboard_entry.channels_dict_by_name[channel_name].id
-            points = self._client.get_channel_points(self._leaderboard_entry.internal_id, channel_id)
-            data['x_{}'.format(channel_name)] = pd.Series(points.xs)
-            data['y_{}'.format(channel_name)] = pd.Series(points.numeric_ys)
+            channels_data[channel_name] = pd.read_csv(
+                self._client.get_channel_points_csv(self._leaderboard_entry.internal_id, channel_id),
+                header=None,
+                names=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
+            )
 
-        return pd.DataFrame.from_dict(data)
+        return pd.concat(channels_data.values(), axis=1, sort=False)
 
     def __str__(self):
         return 'Experiment({})'.format(self.id)

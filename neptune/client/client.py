@@ -1,10 +1,12 @@
+from io import StringIO
+
+from bravado.client import SwaggerClient
 from bravado.requests_client import Authenticator
 from bravado.requests_client import RequestsClient
-from bravado.client import SwaggerClient
 from bravado_core.formatter import SwaggerFormat
 from requests.auth import AuthBase
 
-from neptune.model import LeaderboardEntry, Points
+from neptune.model import LeaderboardEntry
 
 
 class OAuthNoRefreshAuth(AuthBase):
@@ -94,14 +96,25 @@ class Client(object):
 
         return [LeaderboardEntry(e) for e in self._get_all_items(get_portion, step=100)]
 
-    def get_channel_points(self, experiment_internal_id, channel_internal_id):
-        def get_portion(limit, offset):
-            return self.backend_swagger_client.api.getChannelValues(
-                experimentId=experiment_internal_id, channelId=channel_internal_id,
-                limit=limit, offset=offset
-            ).response().result.values
+    def get_channel_points_csv(self, experiment_internal_id, channel_internal_id):
+        csv = StringIO()
+        csv.write(
+            self.backend_swagger_client.api.getChannelValuesCSV(
+                experimentId=experiment_internal_id, channelId=channel_internal_id
+            ).response().incoming_response.text
+        )
+        csv.seek(0)
+        return csv
 
-        return Points(self._get_all_items(get_portion, step=1000))
+    def get_metrics_csv(self, experiment_internal_id):
+        csv = StringIO()
+        csv.write(
+            self.backend_swagger_client.api.getSystemMetricsCSV(
+                experimentId=experiment_internal_id
+            ).response().incoming_response.text
+        )
+        csv.seek(0)
+        return csv
 
     @staticmethod
     def _get_all_items(get_portion, step):

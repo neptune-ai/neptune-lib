@@ -33,7 +33,7 @@ def main():
                        "IjoiOTJhNzhiOWQtZTc3Ni00ODlhLWI5YzEtNzRkYmI1ZGVkMzAyIn0="
     class FakeCreds(object):
         def __init__(self):
-            self.api_address = 'https://app.neptune.ml/api'
+            self.api_address = 'https://app.stage.neptune.ml/api'
             self.api_token = ''
 
     s = Session(Credentials(sample_api_token))
@@ -43,7 +43,7 @@ def main():
     projects = s.get_projects('hubert3')
     print('Projects: {}\n'.format(projects))
 
-    project = projects['hubert3/sandbox']
+    project = projects['hubert3/sandbox-old']
     members = project.get_members()
     print('Members: {}\n'.format(members))
 
@@ -52,7 +52,7 @@ def main():
 
     import pandas as pd
     with pd.option_context('display.max_rows', 10, 'display.max_columns', None, 'display.width', None):
-        exp = experiments[16]
+        exp = next(e for e in experiments if e.id == 'SAN-49')
         print('System properties:\n{}\n'.format(exp.system_properties))
         print('Properties:\n{}\n'.format(exp.properties))
         print('Parameters:\n{}\n'.format(exp.parameters))
@@ -62,8 +62,14 @@ def main():
         print('Leaderboard:\n{}\n'.format(leaderboard))
 
     with pd.option_context('display.max_rows', 10, 'display.max_columns', None, 'display.width', None):
-        channel_values = exp.get_numeric_channels_values('unet batch sum loss', 'unet epoch sum loss')
-        print('Channel values:\n{}\n'.format(channel_values))
+        channel_values = exp.get_numeric_channels_values('Accuracy training', 'Accuracy validation')
+        print('channel values:\n{}\n'.format(channel_values))
+
+    with pd.option_context('display.max_rows', 10, 'display.max_columns', None, 'display.width', None):
+        metrics = exp.get_hardware_utilization()
+        print('metrics:\n{}\n'.format(metrics))
+
+    print(1)
 
 
 if __name__ == '__main__':
