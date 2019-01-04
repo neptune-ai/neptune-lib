@@ -3,7 +3,7 @@ from typing import Dict
 import pandas as pd
 from pandas.errors import EmptyDataError
 
-from neptune.utils import map_values
+from neptunelib.utils import map_values
 
 
 class Experiment(object):

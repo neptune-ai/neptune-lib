@@ -4,8 +4,8 @@ from bravado.client import SwaggerClient
 from bravado.requests_client import RequestsClient
 from bravado_core.formatter import SwaggerFormat
 
-from neptune.client.oauth import NeptuneAuthenticator
-from neptune.model import LeaderboardEntry
+from neptunelib.model import LeaderboardEntry
+from neptunelib.oauth import NeptuneAuthenticator
 
 
 class Client(object):

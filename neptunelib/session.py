@@ -1,8 +1,8 @@
 from typing import Dict
 
-from neptune.client.client import Client
-from neptune.lib.credentials import Credentials
-from neptune.lib.project import Project
+from neptunelib.client import Client
+from neptunelib.credentials import Credentials
+from neptunelib.project import Project
 
 
 class Session(object):

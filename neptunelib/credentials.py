@@ -2,7 +2,7 @@ import base64
 import json
 import os
 
-from neptune.lib.exceptions import InvalidApiToken
+from neptunelib.exceptions import InvalidApiToken
 
 
 class Credentials(object):

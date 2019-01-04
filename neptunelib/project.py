@@ -1,8 +1,8 @@
 from typing import List, Union, Optional
 import pandas as pd
 
-from neptune.lib.experiment import Experiment
-from neptune.utils import map_keys
+from neptunelib.experiment import Experiment
+from neptunelib.utils import map_keys
 
 OptionalStrOrStrList = Union[None, str, List[str]]
 

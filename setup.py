@@ -28,7 +28,7 @@ def main():
             long_description='Neptune Python library',
             license='Apache License 2.0',
             install_requires=requirements,
-            packages=find_packages(include=['neptune*']),
+            packages=find_packages(include=['neptunelib*']),
             cmdclass={
                 'git_version': git_version.GitVersion,
             }
