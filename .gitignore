@@ -1,3 +1,12 @@
+# dist
 VERSION
 neptune_lib.egg-info/
 dist/
+
+# tests
+.cache/
+.tox/
+tests/results*.xml
+tests/coverage*.xml
+tests/.pytest_cache
+.coverage
