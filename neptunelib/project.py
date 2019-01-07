@@ -1,8 +1,9 @@
-from typing import List, Union, Optional
+from typing import List, Optional, Union
+
 import pandas as pd
 
 from neptunelib.experiment import Experiment
-from neptunelib.utils import map_keys
+from neptunelib.utils import as_list, map_keys
 
 OptionalStrOrStrList = Union[None, str, List[str]]
 
@@ -22,13 +23,7 @@ class Project(object):
         """
         return self.client.get_project_members(self.namespace, self.name)
 
-    def get_experiments(self,
-                        id: OptionalStrOrStrList = None,
-                        group: OptionalStrOrStrList = None,
-                        state: OptionalStrOrStrList = None,
-                        owner: OptionalStrOrStrList = None,
-                        tag: OptionalStrOrStrList = None,
-                        min_running_time: Optional[int] = None) -> List[Experiment]:
+    def get_experiments(self, id=None, group=None, state=None, owner=None, tag=None, min_running_time=None):
         """
         Retrieve a list of experiments matching the specified criteria.
         All of the parameters of this method are optional, each of them specifies a single criterion.
@@ -52,22 +47,12 @@ class Project(object):
         :param tag: A tag or a list of experiment tags. E.g. 'solution-1' or ['solution-1', 'solution-2'].
         :param min_running_time: Minimum running time of an experiment in seconds.
         """
-
-        # TODO: sort by ShortID ASC
-        # TODO: use filters
-        # TODO: filter by being an experiment (not a group)
-        leaderboard_entries = self.client.get_leaderboard_entries(self.namespace, self.name)
+        leaderboard_entries = self._fetch_leaderboard(id, group, state, owner, tag, min_running_time)
         return [
             Experiment(self.client, entry) for entry in leaderboard_entries
         ]
 
-    def get_leaderboard(self,
-                        id: OptionalStrOrStrList = None,
-                        group: OptionalStrOrStrList = None,
-                        state: OptionalStrOrStrList = None,
-                        owner: OptionalStrOrStrList = None,
-                        tag: OptionalStrOrStrList = None,
-                        min_running_time: Optional[int] = None) -> pd.DataFrame:
+    def get_leaderboard(self, id=None, group=None, state=None, owner=None, tag=None, min_running_time=None):
         """
         Retrieve experiments matching the specified criteria and present them in a form of a DataFrame
         resembling Neptune's leaderboard.
@@ -103,12 +88,8 @@ class Project(object):
         :param tag: A tag or a list of experiment tags. E.g. 'solution-1' or ['solution-1', 'solution-2'].
         :param min_running_time: Minimum running time of an experiment in seconds.
         """
-
-        # TODO: sort by ShortID ASC
-        # TODO: use filters
-        # TODO: filter by being an experiment (not a group)
         # TODO: tags - czy teraz jest ok?
-        leaderboard_entries = self.client.get_leaderboard_entries(self.namespace, self.name)
+        leaderboard_entries = self._fetch_leaderboard(id, group, state, owner, tag, min_running_time)
 
         def make_row(entry):
             channels = dict(
@@ -148,6 +129,13 @@ class Project(object):
 
     def __repr__(self):
         return str(self)
+
+    def _fetch_leaderboard(self, id, group, state, owner, tag, min_running_time):
+        return self.client.get_leaderboard_entries(
+            namespace=self.namespace, project_name=self.name,
+            ids=as_list(id), group_ids=as_list(group), states=as_list(state),
+            owners=as_list(owner), tags=as_list(tag),
+            min_running_time=min_running_time)
 
     @staticmethod
     def _sort_leaderboard_columns(column_names):
