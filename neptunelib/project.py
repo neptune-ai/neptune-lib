@@ -1,21 +1,19 @@
-from typing import List, Optional, Union
-
 import pandas as pd
 
 from neptunelib.experiment import Experiment
 from neptunelib.utils import as_list, map_keys
 
-OptionalStrOrStrList = Union[None, str, List[str]]
-
 
 class Project(object):
+    # pylint: disable=redefined-builtin
+
     def __init__(self, client, internal_id, namespace, name):
         self.client = client
         self.internal_id = internal_id
         self.namespace = namespace
         self.name = name
 
-    def get_members(self) -> List[str]:
+    def get_members(self):
         """
         Retrieve a list of project members.
 
@@ -96,8 +94,8 @@ class Project(object):
                 ('channel_{}'.format(ch.name), ch.trimmed_y) for ch in entry.channels
             )
 
-            parameters = map_keys(lambda k: 'parameter_{}'.format(k), entry.parameters)
-            properties = map_keys(lambda k: 'property_{}'.format(k), entry.properties)
+            parameters = map_keys('parameter_{}'.format, entry.parameters)
+            properties = map_keys('property_{}'.format, entry.properties)
 
             r = {}
             r.update(entry.system_properties)
@@ -112,13 +110,13 @@ class Project(object):
         df = df.reindex(self._sort_leaderboard_columns(df.columns), axis='columns')
         return df
 
-    def get_experiment_groups(self) -> List[str]:
+    def get_experiment_groups(self):
         """
         Retrieve a list of groups in the project.
 
         :return: A list of group of group IDs, e.g. ['SAN-GRP-1', 'SAN-GRP-2'].
         """
-        pass
+        # TODO
 
     @property
     def full_id(self):
