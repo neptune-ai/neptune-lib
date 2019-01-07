@@ -47,13 +47,16 @@ class Client(object):
         return r.result
 
     def get_leaderboard_entries(self, namespace, project_name,
-                                ids, group_ids,
-                                states, owners, tags,
-                                min_running_time):
+                                entry_types=None, ids=None, group_ids=None,
+                                states=None, owners=None, tags=None,
+                                min_running_time=None):
+        if entry_types is None:
+            entry_types = ['experiment', 'notebook']
+
         def get_portion(limit, offset):
             return self.leaderboard_swagger_client.api.getLeaderboard(
                 projectIdentifier="{}/{}".format(namespace, project_name),
-                entryType=['experiment', 'notebook'],
+                entryType=entry_types,
                 shortId=ids, groupShortId=group_ids, state=states, owner=owners, tags=tags,
                 minRunningTimeSeconds=min_running_time,
                 sortBy=['shortId'], sortFieldType=['native'], sortDirection=['ascending'],

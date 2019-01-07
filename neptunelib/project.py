@@ -116,7 +116,10 @@ class Project(object):
 
         :return: A list of group of group IDs, e.g. ['SAN-GRP-1', 'SAN-GRP-2'].
         """
-        # TODO
+        group_entries = self.client.get_leaderboard_entries(namespace=self.namespace,
+                                                            project_name=self.name,
+                                                            entry_types=['group'])
+        return [entry.id for entry in group_entries]
 
     @property
     def full_id(self):
