@@ -19,7 +19,7 @@ persistent=yes
 
 # List of plugins (as comma separated values of python modules names) to load,
 # usually to register additional checkers.
-load-plugins=
+load-plugins=pylintfileheader
 
 
 [MESSAGES CONTROL]
@@ -34,7 +34,6 @@ load-plugins=
 # no Warning level messages displayed, use"--disable=all --enable=classes
 # --disable=W"
 
-# deepsense.io:
 # R     Disable all messages of "Refactor" category.
 # C0103 Disable checking variable/function/class names.
 # C0111 Allow packages, classes and methods without docstrings.
@@ -48,7 +47,6 @@ disable=R,C0103,C0111,W0401,W0511,W0614,W0703,I0011
 # either give multiple identifier separated by comma (,) or put this option
 # multiple time. See also the "--disable" option for examples.
 
-# deepsense.io:
 # R0401 Enable detection of cyclic imports.
 # R0801 Enable detection of similar code.
 # R0921 Enable checking for unused abstract classes.
@@ -140,7 +138,6 @@ class-attribute-rgx=([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$
 inlinevar-rgx=[A-Za-z_][A-Za-z0-9_]*$
 
 # Good variable names which should always be accepted, separated by a comma
-# deepsense.io Allow x, y, z
 good-names=i,j,k,x,y,z,ex,Run,_
 
 # Bad variable names which should always be refused, separated by a comma
@@ -294,3 +291,20 @@ valid-metaclass-classmethod-first-arg=mcs
 # Exceptions that will emit a warning when being caught. Defaults to
 # "Exception"
 overgeneral-exceptions=Exception
+
+# File header
+file-header=#
+    # Copyright (c) 2019, Neptune Labs Sp. z o.o.
+    #
+    # Licensed under the Apache License, Version 2.0 (the "License");
+    # you may not use this file except in compliance with the License.
+    # You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+    #
