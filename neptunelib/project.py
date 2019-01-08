@@ -131,6 +131,12 @@ class Project(object):
     def __repr__(self):
         return str(self)
 
+    def __eq__(self, o):
+        return self.__dict__ == o.__dict__
+
+    def __ne__(self, o):
+        return not self.__eq__(o)
+
     def _fetch_leaderboard(self, id, group, state, owner, tag, min_running_time):
         return self.client.get_leaderboard_entries(
             namespace=self.namespace, project_name=self.name,

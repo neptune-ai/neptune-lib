@@ -1,5 +1,3 @@
-from typing import Dict
-
 import pandas as pd
 from pandas.errors import EmptyDataError
 
@@ -18,7 +16,7 @@ class Experiment(object):
         return self._leaderboard_entry.id
 
     @property
-    def system_properties(self) -> pd.DataFrame:
+    def system_properties(self):
         """
         Retrieve system properties like owner, times of creation and completion, worker type, etc.
         Note, that the list of supported system properties changes over time.
@@ -28,7 +26,7 @@ class Experiment(object):
         return self._simple_dict_to_dataframe(self._leaderboard_entry.system_properties)
 
     @property
-    def channels(self) -> Dict[str, str]:
+    def channels(self):
         """
         Retrieve all channel names along with their types for this experiment.
 
@@ -39,7 +37,7 @@ class Experiment(object):
         )
 
     @property
-    def parameters(self) -> pd.DataFrame:
+    def parameters(self):
         """
         Retrieve parameters for this experiment.
 
@@ -48,7 +46,7 @@ class Experiment(object):
         return self._simple_dict_to_dataframe(self._leaderboard_entry.parameters)
 
     @property
-    def properties(self) -> pd.DataFrame:
+    def properties(self):
         """
         Retrieve user-defined properties for this experiment.
 
@@ -56,7 +54,7 @@ class Experiment(object):
         """
         return self._simple_dict_to_dataframe(self._leaderboard_entry.properties)
 
-    def get_hardware_utilization(self) -> pd.DataFrame:
+    def get_hardware_utilization(self):
         """
         Retrieve RAM, CPU and GPU utilization throughout the experiment.
 
@@ -85,7 +83,7 @@ class Experiment(object):
         except EmptyDataError:
             return pd.DataFrame()
 
-    def get_numeric_channels_values(self, *channel_names: str) -> pd.DataFrame:
+    def get_numeric_channels_values(self, *channel_names):
         """
         Retrieve values of specified numeric channels.
 

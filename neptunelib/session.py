@@ -1,19 +1,17 @@
-from typing import Dict
-
 from neptunelib.client import Client
 from neptunelib.credentials import Credentials
 from neptunelib.project import Project
 
 
 class Session(object):
-    def __init__(self, credentials: Credentials = Credentials.from_env()):
+    def __init__(self, credentials=None):
         """
         :param credentials: `Credentials` object for authenticating your calls to Neptune API.
         """
-        self.credentials = credentials
-        self._client = Client(credentials.api_address, credentials.api_token)
+        self.credentials = credentials or Credentials.from_env()
+        self._client = Client(self.credentials.api_address, self.credentials.api_token)
 
-    def get_projects(self, namespace=None) -> Dict[str, Project]:
+    def get_projects(self, namespace=None):
         """
         Retrieve projects from given namespace, that our available using given credentials.
 
