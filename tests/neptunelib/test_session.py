@@ -38,32 +38,6 @@ class TestSession(unittest.TestCase):
         os_getenv.assert_not_called()
 
     @patch('neptunelib.session.Client')
-    def test_get_projects_with_default_namespace(self, _):
-        # given
-        credentials = MagicMock()
-        credentials.namespace = 'default'
-
-        # and
-        api_projects = [a_project(), a_project()]
-
-        # and
-        session = Session(credentials)
-        session._client.get_projects.return_value = api_projects
-
-        # when
-        projects = session.get_projects()
-
-        # then
-        expected_projects = {
-            credentials.namespace + '/' + p.name:
-                Project(session._client, p.id, credentials.namespace, p.name) for p in api_projects
-        }
-        self.assertEqual(expected_projects, projects)
-
-        # and
-        session._client.get_projects.assert_called_with(credentials.namespace)
-
-    @patch('neptunelib.session.Client')
     def test_get_projects_with_given_namespace(self, _):
         # given
         credentials = MagicMock()

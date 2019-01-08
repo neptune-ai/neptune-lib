@@ -38,13 +38,6 @@ class Credentials(object):
         self.api_token = api_token
 
     @property
-    def namespace(self):
-        """
-        :return: The namespace these credentials are associated with.
-        """
-        return self._api_token_to_dict(self.api_token)['namespace']
-
-    @property
     def api_address(self):
         """
         :return: The address of the Neptune API associated with these credentials.
