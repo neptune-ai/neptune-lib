@@ -1,0 +1,3 @@
+
+class InvalidApiToken(Exception):
+    pass
