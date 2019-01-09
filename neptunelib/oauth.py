@@ -63,7 +63,7 @@ class NeptuneAuthenticator(Authenticator):
                 token=token,
                 auto_refresh_url=refresh_url,
                 auto_refresh_kwargs={'client_id': client_name},
-                token_updater=lambda x: None))
+                token_updater=_no_token_updater))
 
     def matches(self, url):
         return True
@@ -71,3 +71,8 @@ class NeptuneAuthenticator(Authenticator):
     def apply(self, request):
         request.auth = self.auth
         return request
+
+
+def _no_token_updater():
+    # For unit tests.
+    return None

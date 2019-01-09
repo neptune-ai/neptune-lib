@@ -17,8 +17,8 @@
 import unittest
 from random import randint
 
-from mock import MagicMock
 import pandas as pd
+from mock import MagicMock
 
 from neptunelib.experiment import Experiment
 from neptunelib.model import LeaderboardEntry
