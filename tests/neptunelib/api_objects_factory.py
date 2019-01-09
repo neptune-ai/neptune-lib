@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from random import randint
+from random import randint, uniform
 
 from mock import MagicMock
 
@@ -78,6 +78,32 @@ def an_experiment_states(creating=None, waiting=None, initializing=None, running
     return experiment_states
 
 
+def a_property():
+    p = MagicMock()
+    p.key = a_string()
+    p.value = a_string()
+    return p
+
+
+def a_parameter():
+    p = MagicMock()
+    p.id = a_uuid_string()
+    p.name = a_string()
+    p.parameterType = 'double'
+    p.value = str(uniform(-100, 100))
+    return p
+
+
+def a_channel_value():
+    cv = MagicMock()
+    cv.channelId = a_uuid_string()
+    cv.channelName = a_string()
+    cv.channelType = 'numeric'
+    cv.x = uniform(1, 100)
+    cv.y = str(uniform(1, 100))
+    return cv
+
+
 def an_experiment_leaderboard_entry_dto():
     entry = MagicMock()
     entry.entryType = 'experiment'
@@ -103,9 +129,9 @@ def an_experiment_leaderboard_entry_dto():
     entry.sourceSize = randint(1, 1000)
     entry.sourceMd5 = a_string()
     entry.commitId = a_string()
-    entry.properties = []
-    entry.parameters = []
-    entry.channelsLastValues = []
+    entry.properties = [a_property(), a_property()]
+    entry.parameters = [a_parameter(), a_parameter()]
+    entry.channelsLastValues = [a_channel_value(), a_channel_value()]
     entry.trashed = False
     entry.deleted = False
     entry.isBestExperiment = False
@@ -136,10 +162,11 @@ def a_group_leaderboard_entry_dto():
     entry.hostname = a_string()
     entry.sourceSize = randint(1, 1000)
     entry.sourceMd5 = a_string()
+    entry.gitHash = a_string()
     entry.commitId = a_string()
-    entry.properties = []
-    entry.parameters = []
-    entry.channelsLastValues = []
+    entry.properties = [a_property(), a_property()]
+    entry.parameters = [a_parameter(), a_parameter()]
+    entry.channelsLastValues = [a_channel_value(), a_channel_value()]
     entry.trashed = False
     entry.deleted = False
     entry.isBestExperiment = False

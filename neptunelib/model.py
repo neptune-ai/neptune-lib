@@ -71,7 +71,7 @@ class LeaderboardEntry(object):
             'size': entry.size,
             'tags': entry.tags,
             'notes': entry.description,
-            'git_hash': getattr(entry, 'gitHash', None),
+            'git_hash': entry.gitHash
         }
 
     @property

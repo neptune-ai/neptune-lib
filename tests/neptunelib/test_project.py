@@ -18,12 +18,15 @@ import unittest
 from random import randint
 
 from mock import MagicMock
+import pandas as pd
 
 from neptunelib.experiment import Experiment
 from neptunelib.model import LeaderboardEntry
 from neptunelib.project import Project
 from tests.neptunelib.api_objects_factory import a_group_leaderboard_entry_dto, a_registered_project_member, \
     an_invited_project_member
+from tests.neptunelib.project_test_fixture import some_exp_entry_dto, some_exp_entry_row, some_grp_entry_dto, \
+    some_grp_entry_row
 from tests.neptunelib.random_utils import a_string, a_string_list, a_uuid_string
 
 
@@ -124,8 +127,45 @@ class TestProject(unittest.TestCase):
         self.assertEqual(expected_experiments, experiments)
 
     def test_get_leaderboard(self):
-        # TODO
-        pass
+        # given
+        self.client.get_leaderboard_entries.return_value = [
+            LeaderboardEntry(some_exp_entry_dto), LeaderboardEntry(some_grp_entry_dto)]
+
+        # when
+        leaderboard = self.project.get_leaderboard()
+
+        # then
+        self.client.get_leaderboard_entries.assert_called_once_with(
+            namespace=self.project.namespace, project_name=self.project.name,
+            ids=None, group_ids=None,
+            states=None, owners=None, tags=None,
+            min_running_time=None)
+
+        # and
+        expected_data = {0: some_exp_entry_row, 1: some_grp_entry_row}
+        expected_leaderboard = pd.DataFrame.from_dict(data=expected_data, orient='index')
+        expected_leaderboard = expected_leaderboard.reindex(
+            # pylint: disable=protected-access
+            self.project._sort_leaderboard_columns(expected_leaderboard.columns), axis='columns')
+
+        self.assertTrue(leaderboard.equals(expected_leaderboard))
+
+    def test_sort_leaderboard_columns(self):
+        # given
+        columns_in_expected_order = [
+            'id', 'name', 'created', 'finished', 'owner', 'worker_type', 'environment',
+            'git_hash', 'notes', 'size', 'source_code_size', 'tags',
+            'channel_abc', 'channel_def',
+            'parameter_abc', 'parameter_def',
+            'property_abc', 'property_def'
+        ]
+
+        # when
+        # pylint: disable=protected-access
+        sorted_columns = self.project._sort_leaderboard_columns(reversed(columns_in_expected_order))
+
+        # then
+        self.assertEqual(columns_in_expected_order, sorted_columns)
 
     def test_get_experiment_groups(self):
         # given
