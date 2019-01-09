@@ -35,7 +35,8 @@ class Project(object):
 
         :return: A list of usernames of project members.
         """
-        return self.client.get_project_members(self.namespace, self.name)
+        project_members = self.client.get_project_members(self.namespace, self.name)
+        return [member.registeredMemberInfo.username for member in project_members if member.registeredMemberInfo]
 
     def get_experiments(self, id=None, group=None, state=None, owner=None, tag=None, min_running_time=None):
         """

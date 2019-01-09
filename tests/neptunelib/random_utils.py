@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+import datetime
 import random
 import string
 import uuid
@@ -26,3 +26,11 @@ def a_string():
 
 def a_uuid_string():
     return str(uuid.uuid4())
+
+
+def a_string_list(length=2):
+    return [a_string() for _ in range(0, length)]
+
+
+def a_timestamp():
+    return datetime.datetime.now()

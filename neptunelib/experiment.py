@@ -139,6 +139,12 @@ class Experiment(object):
     def __repr__(self):
         return str(self)
 
+    def __eq__(self, o):
+        return self.__dict__ == o.__dict__
+
+    def __ne__(self, o):
+        return not self.__eq__(o)
+
     @staticmethod
     def _simple_dict_to_dataframe(d):
         return pd.DataFrame.from_dict(map_values(lambda x: [x], d))
