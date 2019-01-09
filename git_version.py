@@ -3,7 +3,7 @@ from distutils.cmd import Command
 import re
 from subprocess import CalledProcessError, call, check_output
 
-PREFIX = 'lib-python/'
+PREFIX = ''
 INITIAL_VERSION = '0.0.0'
 
 tag_re = re.compile(r'\btag: %s([0-9][^,]*)\b' % PREFIX)

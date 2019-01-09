@@ -11,9 +11,12 @@ script:
   - python -m pylint -j 0 -f parseable neptunelib tests
   - tox
 deploy:
+  distributions: "git_version sdist"
   provider: pypi
   user: rafal.hryciuk
   password:
     secure: e+2g1ta16RWwTPQyhe5ms9iNsXLtDsTkPmWHM0ckiLgip7IxTzvsNLEkMsICwuaZkUIOjSkj58MJZq80zRT+psy725zP6gNA10pc9y1sE9K5LFa7bzrk9EV83LDlCK+EMpL98dRU8oCdxTxT52lQygyitKFcrZ8HnaiZCWC6/pTFzUwC+BxNPaqajlcw5Ep0OXYiAOkA8gNES6rZYZr02UjOKTcUR/00knQbSd/JUzfninrrI1I2Z9Iq8AdvL/oA7mHQUJHjlfCGZMuSF5Lcmkl2KDFhx4Uo9IQh4ieLooiM/160+J7rurVua/9xDICoHACsAW1g+s+urmUufI/HyrdBtBNWryKILxhxAOwJQY0U4EVzbf3wbWE2Qom3w4eEf0U+IIbYTvFUvbeZZJRRcxGjG/tZhxDQq2Dgj8IOZw+m3sOmuEaeJ2XgrDkZ0c2g+p3hxr+15YKLyJ3dOIMk8gZQEA3IXs6VseV0WDSvtRluGUMHlP2A7+OPIHp3DNstKF5Ms5ffQs0jGKm+wueQVlfhwtZnoQ8tjYe68LpCDbOe80aleM6iTNGtnVEaNhNe39WtISdtfcsCbe/cnOMM0A27h1Ai68Pt/H+LTfFOJYnkc3fXMc1TGYOh6JPr3dhpnxyJ1iyqnQO1vxEVTtJAs9sitlTx9vPBEStGgyGinZc=
   on:
     tags: true
+  skip_existing: true
+
