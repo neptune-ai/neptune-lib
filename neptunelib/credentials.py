@@ -63,6 +63,6 @@ class Credentials(object):
     @staticmethod
     def _api_token_to_dict(api_token):
         try:
-            return json.loads(base64.b64decode(api_token.encode()))
+            return json.loads(base64.b64decode(api_token.encode()).decode("utf-8"))
         except Exception:
             raise InvalidApiToken("Failed to deserialize API token: {}".format(api_token))
