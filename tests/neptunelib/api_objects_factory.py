@@ -162,7 +162,6 @@ def a_group_leaderboard_entry_dto():
     entry.hostname = a_string()
     entry.sourceSize = randint(1, 1000)
     entry.sourceMd5 = a_string()
-    entry.gitHash = a_string()
     entry.commitId = a_string()
     entry.properties = [a_property(), a_property()]
     entry.parameters = [a_parameter(), a_parameter()]
