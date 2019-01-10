@@ -41,8 +41,18 @@ def combine_channel_df(experiments, channel_name):
     combined_df = pd.concat(combined_df, axis=0)
     return combined_df
 
-
 def curve_compare(experiments, channel_name):
+    fig = plt.figure(figsize=(16,12))
+    for experiment in experiments:
+        channel_df = experiment.get_numeric_channels_values(channel_name) 
+        plt.plot( 'x_{}'.format(channel_name),
+                 'y_{}'.format(channel_name), 
+                 data=channel_df, 
+                 marker='', linewidth=2, label=experiment.id)
+    plt.legend()
+    return fig
+
+def interacvite_curve_compare(experiments, channel_name):
     combined_df = combine_channel_df(experiments, channel_name)
     combined_df.columns = [col.replace('_{}'.format(channel_name),'') for col in combined_df.columns]
 
