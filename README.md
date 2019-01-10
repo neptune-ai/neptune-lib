@@ -74,16 +74,14 @@ pip install neptune-lib
 If you get stuck, don't worry we are here to help.
 The best order of communication is:
 
- * **TODO** [neptune-lib readthedocks]()
  * [neptune community forum](https://community.neptune.ml/)
- * **TODO** [neptune community slack]()
  * Github issues
  
 # Contributing
 If you see something that you don't like you are more than welcome to contribute!
 There are many options:
   
-  * Participate in discussions on [neptune community forum](https://community.neptune.ml/) or **TODO** [neptune community slack]()
+  * Participate in discussions on [neptune community forum](https://community.neptune.ml/)
   * Submit a feature request or a bug here, on Github
   * Submit a pull request that deals with an open feature request or bug
   * Spread a word about neptune-lib in your community
