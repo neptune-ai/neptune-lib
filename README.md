@@ -59,7 +59,7 @@ experiment = experiments[0]
 
 ## Get prerequisites
 * python versions `2.7/3.5/3.6` are supported
-* `neptune-cli` is useful but not a must. If you want to install it go
+* `neptune-cli` 
    ```python
       pip install neptune-cli
    ```
