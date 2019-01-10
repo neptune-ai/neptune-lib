@@ -5,6 +5,56 @@
 
 ## Experiment Api
 
+### Get api-token
+
+```bash
+neptune account api-token get
+```
+
+### Establish session
+
+```python
+from neptunelib.credentials import Credentials
+credentials = Credentials(api_token=`YOUR_NEPTUNE_API_TOKEN`)
+```
+
+```python
+from neptunelib.session import Session
+session = Session(credentials=credentials)
+```
+
+### Instatiate a Project object
+
+```python
+project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+```
+
+### Get leaderbaord dataframe
+
+```python
+leaderboard_df = project.get_leaderboard()
+```
+
+### Get experiment data
+
+```python
+experiments = project.get_experiments(id=['SAL-2342'])
+experiment = experiments[0]
+```
+
+1. get numeric channel values dataframe
+    
+```python
+    channel_df = experiment.get_numeric_channels_values('network_1 epoch_val iou loss')
+```
+    
+2. get hardware utilization dataframe 
+
+```python
+   channel_df = experiment.get_hardware_utilization()
+```
+
+
 # Installation
 
 ## Get prerequisites
