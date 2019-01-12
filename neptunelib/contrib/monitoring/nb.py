@@ -17,6 +17,22 @@ class NeptuneConfig:
         return AttrDict(config) 
 
 
+class NotebookChannels(dict):
+    def __init__(self, figsize, max_cols):
+        super().__init__(self)
+        self.figsize=figsize
+        self.max_cols=max_cols
+        
+    def plot(self):
+        plt.figure(figsize=self.figsize)
+        clear_output(wait=True)
+        for metric_id, (channel_name, channel) in enumerate(self.items()):
+            plt.subplot((len(self) + 1) // self.max_cols + 1, self.max_cols, metric_id + 1)
+            plt.plot(channel.x, channel.y, label=channel.channel_name)
+            plt.legend()
+        plt.show()
+        
+        
 class NotebookChannel:
     def __init__(self, channel_name):
         self.channel_name = channel_name
@@ -30,13 +46,7 @@ class NotebookChannel:
         if None in self.x:
             self.x = range(len(self.y))
     
-    def plot(self):
-        clear_output(wait=True)
-        plt.plot(self.x, self.y, label=self.channel_name)
-        plt.legend()
-        plt.show()
-        
-        
+    
 def NotebookContext(context, config_filepath):
     if context.params.__class__.__name__ == 'OfflineContextParams':
         context = NotebookOfflineContext(context, config_filepath)
@@ -44,10 +54,11 @@ def NotebookContext(context, config_filepath):
 
 
 class NotebookOfflineContext:
-    def __init__(self, context, config_filepath):
+    def __init__(self, context, config_filepath, 
+                 figsize=(16,12), max_cols=2):
         self.context = context
         self.config = NeptuneConfig(config_filepath)
-        self.channels={}
+        self.channels = NotebookChannels(figsize=figsize, max_cols=max_cols)
         
     @property
     def params(self):
@@ -56,4 +67,4 @@ class NotebookOfflineContext:
     def channel_send(self, channel_name, x=None, y=None):
         self.channels[channel_name] = self.channels.get(channel_name, NotebookChannel(channel_name))
         self.channels[channel_name].update({'x':x, 'y':y})
-        self.channels[channel_name].plot()
+        self.channels.plot()
