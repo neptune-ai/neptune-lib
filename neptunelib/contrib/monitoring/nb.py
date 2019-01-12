@@ -44,7 +44,7 @@ class NotebookChannel:
         self.y.append(metrics['y'])
         
         if None in self.x:
-            self.x = range(len(self.y))
+            self.x = list(range(len(self.y)))
     
     
 def NotebookContext(context, config_filepath):
@@ -58,13 +58,19 @@ class NotebookOfflineContext:
                  figsize=(16,12), max_cols=2):
         self.context = context
         self.config = NeptuneConfig(config_filepath)
-        self.channels = NotebookChannels(figsize=figsize, max_cols=max_cols)
+        self.numeric_channels = NotebookChannels(figsize=figsize, max_cols=max_cols)
+        self.other_channels = {}
         
     @property
     def params(self):
         return self.config.params
     
     def channel_send(self, channel_name, x=None, y=None):
-        self.channels[channel_name] = self.channels.get(channel_name, NotebookChannel(channel_name))
-        self.channels[channel_name].update({'x':x, 'y':y})
-        self.channels.plot()
+        try:
+            y = float(y)
+            self.numeric_channels[channel_name] = self.numeric_channels.get(channel_name, NotebookChannel(channel_name))
+            self.numeric_channels[channel_name].update({'x':x, 'y':y})
+            self.numeric_channels.plot()
+        except Exception:
+            self.other_channels[channel_name] = self.other_channels.get(channel_name, NotebookChannel(channel_name))
+            self.other_channels[channel_name].update({'x':x, 'y':y})
