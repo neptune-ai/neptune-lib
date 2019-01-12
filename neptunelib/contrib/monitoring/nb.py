@@ -37,7 +37,13 @@ class NotebookChannel:
         plt.show()
         
         
-class NotebookContext:
+def NotebookContext(context, config_filepath):
+    if context.params.__class__.__name__ == 'OfflineContextParams':
+        context = NotebookOfflineContext(context, config_filepath)
+    return context
+
+
+class NotebookOfflineContext:
     def __init__(self, context, config_filepath):
         self.context = context
         self.config = NeptuneConfig(config_filepath)
