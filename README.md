@@ -45,7 +45,7 @@ experiment = experiments[0]
 1. get numeric channel values dataframe
     
 ```python
-    channel_df = experiment.get_numeric_channels_values('network_1 epoch_val iou loss')
+    channel_df = experiment.get_numeric_channels_values('network_1', 'epoch_val',  'iou', 'loss')
 ```
     
 2. get hardware utilization dataframe 
