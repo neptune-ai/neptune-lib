@@ -12,7 +12,7 @@ def curve_compare(experiments, channel_name,
     top_height, bottom_height = heights
     combined_df = combine_channel_df(experiments, channel_name)
     combined_df.columns = [col.replace('_{}'.format(channel_name),'') for col in combined_df.columns]
-
+    
     nearest = alt.selection(type='single', nearest=True, on='mouseover',
                             fields=['x'], empty='none')
     interval = alt.selection(type='interval', encodings=['x'])
