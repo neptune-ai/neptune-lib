@@ -9,7 +9,7 @@ import skopt
 import skopt.plots as sk_plots
 from scipy.optimize import OptimizeResult
 
-from .visualizations import fig2pil, axes2fig
+from .monitoring.utils import fig2pil, axes2fig
 
 CTX = neptune.Context()
 
