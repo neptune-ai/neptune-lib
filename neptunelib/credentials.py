@@ -55,8 +55,16 @@ class Credentials(object):
 
     @property
     def api_address(self):
-        """
-        :return: The address of the Neptune API associated with these credentials.
+        """ The address of the Neptune API associated with these credentials.
+        
+        Returns:
+            str: URL address of the Neptune instance
+        
+        Example:
+            >>> from neptunelib.credentials import Credentials
+            >>> credentials=Credentials.from_env()
+            >>> credentials.api_address
+            'https://app.neptune.ml'
         """
         return self._api_token_to_dict(self.api_token)['api_address']
 
