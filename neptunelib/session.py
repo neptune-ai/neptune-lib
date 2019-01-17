@@ -40,7 +40,6 @@ class Session(object):
     """
             
     def __init__(self, credentials=None):
-        
         self.credentials = credentials or Credentials.from_env()
         self._client = Client(self.credentials.api_address, self.credentials.api_token)
 
