@@ -55,9 +55,9 @@ class Client(object):
         ).response()
         return r.result.entries
 
-    def get_project_members(self, namespace, project_name):
+    def get_project_members(self, project_identifier):
         r = self.backend_swagger_client.api.listProjectMembers(
-            organizationName=namespace, projectName=project_name
+            projectIdentifier=project_identifier
         ).response()
 
         return r.result
