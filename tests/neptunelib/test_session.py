@@ -53,15 +53,12 @@ class TestSession(unittest.TestCase):
     @patch('neptunelib.session.Client')
     def test_get_projects_with_given_namespace(self, _):
         # given
-        credentials = MagicMock()
-        credentials.namespace = 'default'
+        session = Session(API_TOKEN)
 
         # and
         api_projects = [a_project(), a_project()]
 
         # and
-        session = Session()
-        session.credentials = credentials
         session._client.get_projects.return_value = api_projects
 
         # and
