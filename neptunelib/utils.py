@@ -14,7 +14,9 @@
 # limitations under the License.
 #
 
-from functools import reduce
+import sys
+if sys.version_info.major > 2:
+    from functools import reduce
 
 import numpy as np
 import pandas as pd
