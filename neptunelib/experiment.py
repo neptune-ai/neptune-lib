@@ -24,7 +24,7 @@ class Experiment(object):
     """It contains all the information about a Neptune Experiment
     
     This class lets you extract experiment:
-        -short experiment id
+        - short experiment id
         - names of all the channels
         - system properties and other properties
         - parameters
