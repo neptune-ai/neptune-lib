@@ -45,6 +45,9 @@ class TestSession(unittest.TestCase):
         session = Session(API_TOKEN)
 
         # then
+        self.assertEqual(session.api_token, API_TOKEN)
+
+        # and
         os_getenv.assert_not_called()
 
     @patch('neptunelib.session.Client')
