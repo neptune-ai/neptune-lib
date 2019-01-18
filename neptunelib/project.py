@@ -16,7 +16,7 @@
 
 import pandas as pd
 
-from neptunelib.experiment import Experiment
+from experiment import Experiment
 from neptunelib.utils import as_list, map_keys
 
 

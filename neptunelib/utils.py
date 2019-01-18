@@ -39,28 +39,33 @@ def as_list(value):
         return [value]
 
     
-def join_channels_on_x(df):
-    x_max = _get_max_x(df)
-    joined_x = pd.DataFrame({'x':list(range(x_max+1))})
-    channel_dfs = _split_df(df)
+def align_channels_on_x(dataframe):
+    x_max = _get_max_x(dataframe)
+    joined_x = pd.DataFrame({'x':list(range(x_max + 1))})
+    channel_dfs = _split_df_by_stems(dataframe)
     
-    joined_dfs = []
+    aligned_dfs = []
     for channel_df in channel_dfs:
         aligned_df = pd.merge(joined_x, channel_df, on='x')
-        joined_dfs.append(aligned_df)
+        aligned_dfs.append(aligned_df)
         
-    joined_dfs = merge_dataframes(joined_dfs, on='x', how='outer')
-    return joined_dfs
+    aligned_dfs = merge_dataframes(aligned_dfs, on='x', how='outer')
+    return aligned_dfs
 
     
 def get_channel_name_stems(columns):
     return list(set([col[2:] for col in columns]))
 
 
-def merge_dataframes(data_frames, on, how='outer'):
+def merge_dataframes(dataframes, on, how='outer'):
     merged_df = reduce(lambda  left, right: pd.merge(left,right, on=on, how=how), 
-                       data_frames)
+                       dataframes)
     return merged_df
+
+
+def sort_df_by_columns(df):
+    df = df.reindex(sorted(df.columns), axis=1)
+    return df
 
 
 def _get_max_x(df):
@@ -69,7 +74,7 @@ def _get_max_x(df):
     return int(np.max(x_maxes))
 
 
-def _split_df(df):
+def _split_df_by_stems(df):
     channel_dfs = []
     for stem in get_channel_name_stems(df.columns):
         channel_df = df[['x_{}'.format(stem),'y_{}'.format(stem)]]
