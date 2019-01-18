@@ -16,3 +16,8 @@ tests/.pytest_cache
 
 # IDE
 .idea
+
+# docs
+docs/_build
+docs/_static
+docs/_templates
