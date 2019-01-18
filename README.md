@@ -78,6 +78,9 @@ The best order of communication is:
  * [neptune community slack](https://neptune-community.slack.com)
  * Github issues
  
+ **slack invitation link**
+ [link](https://join.slack.com/t/neptune-community/shared_invite/enQtNTI2NDI0ODE2MTkyLWM5OGVjMTdkN2JkNDgyOGQzNjZlNmIxMDg1MGFiZGFkZmI0MzEwYjFhYTBhNjIzNmEzNjhiMDgxMmM0YWQ5NTA)
+ 
 # Contributing
 If you see something that you don't like you are more than welcome to contribute!
 There are many options:
