@@ -46,8 +46,7 @@ class Project(object):
         Instantiate a session.
 
         >>> from neptunelib.session import Session
-        >>> from neptunelib.credentials import Credentials
-        >>> session = Session(credentials=Credentials.from_env())
+        >>> session = Session()
 
         Fetch a project.
 
@@ -111,8 +110,7 @@ class Project(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project.
 
@@ -175,8 +173,7 @@ class Project(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project.
 
@@ -227,8 +224,7 @@ class Project(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project.
 

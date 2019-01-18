@@ -40,17 +40,11 @@ class TestSession(unittest.TestCase):
         self.assertEqual(API_TOKEN, session.credentials.api_token)
 
     @patch('neptunelib.credentials.os.getenv', return_value=API_TOKEN)
-    def test_should_accept_given_credentials(self, os_getenv):
-        # given
-        credentials = MagicMock()
-
+    def test_should_accept_given_api_token(self, os_getenv):
         # when
-        session = Session(credentials)
+        session = Session(API_TOKEN)
 
         # then
-        self.assertEqual(credentials, session.credentials)
-
-        # and
         os_getenv.assert_not_called()
 
     @patch('neptunelib.session.Client')
@@ -63,7 +57,8 @@ class TestSession(unittest.TestCase):
         api_projects = [a_project(), a_project()]
 
         # and
-        session = Session(credentials)
+        session = Session()
+        session.credentials = credentials
         session._client.get_projects.return_value = api_projects
 
         # and

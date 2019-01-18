@@ -25,22 +25,33 @@ class Session(object):
     In order to query Neptune experiment database in any way you have to instantiate this object first.
 
     Attributes:
-        credentials (:obj:`Credentials`): Description of `attr2`.
+        api_token(str): This is a secret API key that you can retrieve by running `neptune account api-token get <org>`.
 
     Args:
+        api_token(str): This is a secret API key that you can retrieve by running `neptune account api-token get <org>`.
         credentials (:obj:`Credentials`): `Credentials` object instance that authenticates your calls to Neptune API.
 
     Examples:
         Examples should be written in doctest format, and should illustrate how
         to use the function.
 
-        >>> from neptunelib.credentials import Credentials
         >>> from neptunelib.session import Session
-        >>> session = Session(credentials=Credentials.from_env())
+        >>> session = Session(api_token='YOUR_NEPTUNE_API_TOKEN')
+
+        or assuming you have created an environment variable by running:
+
+        `export NEPTUNE_API_TOKEN=YOUR_NEPTUNE_API_TOKEN`
+
+        and simply go:
+
+        >>> session = Session()
     """
 
-    def __init__(self, credentials=None):
-        self.credentials = credentials or Credentials.from_env()
+    def __init__(self, api_token=None):
+        credentials = Credentials(api_token) if api_token else Credentials.from_env()
+
+        self.api_token = api_token
+        self.credentials = credentials
         self._client = Client(self.credentials.api_address, self.credentials.api_token)
 
     def get_projects(self, namespace):
@@ -63,9 +74,8 @@ class Session(object):
         Examples:
             First, you need to create a Session instance:
 
-            >>> from neptunelib.credentials import Credentials
             >>> from neptunelib.session import Session
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Now, you can list all the projects available for a selected namespace. You can use `YOUR_NAMESPACE` which
                 is your organization or user name. You can also list public projects created by other organizations.
