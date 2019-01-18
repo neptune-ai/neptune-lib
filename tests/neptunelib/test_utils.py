@@ -87,20 +87,19 @@ class TestAlignChannelsOnX(unittest.TestCase):
                                 'x_epoch_channel': list(range(5)) + [np.nan] * 5,
                                 'y_epoch_channel': random_epoch + [np.nan] * 5,
                                 'x_odd_channel': list(range(7)) + [np.nan] * 3,
-                                'y_odd_channel': random_odd + [np.nan] * 3,
-                                })
+                                'y_odd_channel': random_odd + [np.nan] * 3})
 
         aligned_df = pd.DataFrame({'x': list(range(10)),
                                    'batch_channel': random_batch,
                                    'epoch_channel': random_epoch + [np.nan] * 5,
-                                   'odd_channel': random_odd + [np.nan] * 3,
-                                  })
+                                   'odd_channel': random_odd + [np.nan] * 3})
+
         self.aligned_df = sort_df_by_columns(aligned_df)
-        
+
     def test_aligned(self):
         result = align_channels_on_x(self.df)
         result = sort_df_by_columns(result)
-        
+
         assert_frame_equal(result, self.aligned_df)
 
 
@@ -113,8 +112,7 @@ class TestGetChannelNameStems(unittest.TestCase):
                                 'x_epoch_channel': list(range(5)) + [np.nan] * 5,
                                 'y_epoch_channel': np.random.random(10),
                                 'x_odd_channel': list(range(7)) + [np.nan] * 3,
-                                'y_odd_channel': np.random.random(10),
-                                })
+                                'y_odd_channel': np.random.random(10)})
 
     def test_names(self):
         correct_names = set(['epoch_channel', 'batch_channel', 'odd_channel'])
@@ -127,24 +125,21 @@ class TestMergeDataFrames(unittest.TestCase):
         np.random.seed(1234)
         random_df1 = np.random.random(10).tolist()
         self.df1 = pd.DataFrame({'x': list(range(10)),
-                                 'y1': random_df1,
-                                 })
+                                 'y1': random_df1})
 
         random_df2 = np.random.random(3).tolist()
         self.df2 = pd.DataFrame({'x': list(range(3)),
-                                 'y2': random_df2,
-                                 })
+                                 'y2': random_df2})
 
         random_df3 = np.random.random(6).tolist()
         self.df3 = pd.DataFrame({'x': list(range(6)),
-                                 'y3': random_df3,
-                                 })
+                                 'y3': random_df3})
 
         df_merged_outer = pd.DataFrame({'x': list(range(10)),
                                         'y1': random_df1,
                                         'y2': random_df2 + [np.nan] * 7,
-                                        'y3': random_df3 + [np.nan] * 4,
-                                       })
+                                        'y3': random_df3 + [np.nan] * 4})
+
         self.df_merged_outer = sort_df_by_columns(df_merged_outer)
 
     def test_merge_outer(self):
@@ -152,13 +147,13 @@ class TestMergeDataFrames(unittest.TestCase):
         result = sort_df_by_columns(result)
         assert_frame_equal(result, self.df_merged_outer)
 
-        
+
 class TestSortDfByColumns(unittest.TestCase):
 
     def test_letters_and_numbers(self):
-        sorted_df = pd.DataFrame(columns=['1','2','3','a','b','c','d',])
-        shuffled_df = pd.DataFrame(columns=['c','a','1','d','3','2','b'])
-        
+        sorted_df = pd.DataFrame(columns=['1', '2', '3', 'a', 'b', 'c', 'd', ])
+        shuffled_df = pd.DataFrame(columns=['c', 'a', '1', 'd', '3', '2', 'b'])
+
         assert_frame_equal(sort_df_by_columns(shuffled_df), sorted_df)
 
 
