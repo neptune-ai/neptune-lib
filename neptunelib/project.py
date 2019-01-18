@@ -23,6 +23,44 @@ from neptunelib.utils import as_list, map_keys
 class Project(object):
     # pylint: disable=redefined-builtin
 
+    """It contains all the information about a Neptune project
+
+    You can extract the experiment view in a form of a dataframe or a list of experiments.
+    Project lets you do filtering based on conditions not to fetch the entire, sometimes huge list of experiments.
+
+    Args:
+        client(:obj: `neptunelib.Client`): Clien object
+        internal_id:
+        namespace(str): It can either be your organization or user name. You can list all the public projects for any
+               organization or user you want as long as you know their namespace.
+        name(str): short project name.
+
+    Attributes:
+        client:
+        internal_id:
+        namespace(str): It can either be your organization or user name. You can list all the public projects for any
+               organization or user you want as long as you know their namespace.
+        name(str): short project name.
+
+    Examples:
+        Instantiate a session.
+
+        >>> from neptunelib.session import Session
+        >>> from neptunelib.credentials import Credentials
+        >>> session = Session(credentials=Credentials.from_env())
+
+        Fetch a project.
+
+        >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+        >>> project
+        Project(neptune-ml/Salt-Detection)
+
+    Todo:
+        Drop the pylint line.
+        Explain what internal_id is
+
+    """
+
     def __init__(self, client, internal_id, namespace, name):
         self.client = client
         self.internal_id = internal_id
@@ -30,17 +68,23 @@ class Project(object):
         self.name = name
 
     def get_members(self):
-        """
-        Retrieve a list of project members.
+        """Retrieve a list of project members.
 
-        :return: A list of usernames of project members.
+        Returns:
+            list: A list of usernames of project members.
+
+        Examples:
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+            >>> project.get_members()
+
         """
         project_members = self.client.get_project_members(self.namespace, self.name)
         return [member.registeredMemberInfo.username for member in project_members if member.registeredMemberInfo]
 
     def get_experiments(self, id=None, group=None, state=None, owner=None, tag=None, min_running_time=None):
-        """
-        Retrieve a list of experiments matching the specified criteria.
+        """Retrieve a list of experiments matching the specified criteria.
+
         All of the parameters of this method are optional, each of them specifies a single criterion.
 
         Only experiments matching all of the criteria will be returned.
@@ -48,19 +92,41 @@ class Project(object):
         If a specific criterion accepts a list (like `state`), experiments matching any element of the list
         match this criterion.
 
-        E.g. get_experiments(state=['Running', 'Aborted'], owner=['UserA', 'UserB]) will return experiments
-        created by UserA or UserB that are Running or Aborted at the time of request.
+        Args:
+            id(list): An ID or list of experiment IDs (rowo.g. 'SAN-1' or ['SAN-1', 'SAN-2'])
+            group(list): A group or list of groups the returned experiments have to be in.
+                E.g. 'SAN-GRP-1', ['SAN-GRP-1', 'SAN-GRP-2']
+            state(list): A state or list of experiment states.
+                E.g. 'succeeded' or ['succeeded', 'preempted']
+                Possible states: 'creating', 'waiting', 'initializing', 'running',
+                    'cleaning', 'crashed', 'failed', 'aborted', 'preempted', 'succeeded'
+            owner(list): The owner or list of owners of the experiments. This parameter expects usernames.
+            tag(list): A tag or a list of experiment tags. E.g. 'solution-1' or ['solution-1', 'solution-2'].
+            min_running_time(int): Minimum running time of an experiment in seconds.
 
-        :param id: An ID or list of experiment IDs (e.g. 'SAN-1' or ['SAN-1', 'SAN-2'])
-        :param group: A group or list of groups the returned experiments have to be in.
-                    E.g. 'SAN-GRP-1', ['SAN-GRP-1', 'SAN-GRP-2']
-        :param state: A state or list of experiment states.
-                    E.g. 'Succeeded' or ['Succeeded', 'Preempted']
-                    Possible states: 'Creating', 'Waiting', 'Initializing', 'Running',
-                        'Cleaning', 'Crashed', 'Failed', 'Aborted', 'Preempted', 'Succeeded'
-        :param owner: The owner or list of owners of the experiments. This parameter expects usernames.
-        :param tag: A tag or a list of experiment tags. E.g. 'solution-1' or ['solution-1', 'solution-2'].
-        :param min_running_time: Minimum running time of an experiment in seconds.
+        Returns:
+            list: List of `Experiment` objects
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> from neptunelib.credentials import Credentials
+            >>> session = Session(credentials=Credentials.from_env())
+
+            Fetch a project.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+
+            Finally, get a list of experiments that satisfies your criteria:
+
+            >>> project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+            [Experiment(SAL-1609),
+             Experiment(SAL-1765),
+             Experiment(SAL-1941),
+             Experiment(SAL-1960),
+             Experiment(SAL-2025)]
+
         """
         leaderboard_entries = self._fetch_leaderboard(id, group, state, owner, tag, min_running_time)
         return [
@@ -68,7 +134,8 @@ class Project(object):
         ]
 
     def get_leaderboard(self, id=None, group=None, state=None, owner=None, tag=None, min_running_time=None):
-        """
+        """Fetches Neptune experiment view to pandas DataFrame
+
         Retrieve experiments matching the specified criteria and present them in a form of a DataFrame
         resembling Neptune's leaderboard.
 
@@ -89,21 +156,41 @@ class Project(object):
         If a specific criterion accepts a list (like `state`), experiments matching any element of the list
         match this criterion.
 
-        E.g. get_experiments(state=['Running', 'Aborted'], owner=['UserA', 'UserB]) will return experiments
-        created by UserA or UserB that are Running or Aborted at the time of request.
+        Args:
+            id(list): An ID or list of experiment IDs (rowo.g. 'SAN-1' or ['SAN-1', 'SAN-2'])
+            group(list): A group or list of groups the returned experiments have to be in.
+                E.g. 'SAN-GRP-1', ['SAN-GRP-1', 'SAN-GRP-2']
+            state(list): A state or list of experiment states.
+                E.g. 'succeeded' or ['succeeded', 'preempted']
+                Possible states: 'creating', 'waiting', 'initializing', 'running',
+                    'cleaning', 'crashed', 'failed', 'aborted', 'preempted', 'succeeded'
+            owner(list): The owner or list of owners of the experiments. This parameter expects usernames.
+            tag(list): A tag or a list of experiment tags. E.g. 'solution-1' or ['solution-1', 'solution-2'].
+            min_running_time(int): Minimum running time of an experiment in seconds.
 
-        :param id: An ID or list of experiment IDs (rowo.g. 'SAN-1' or ['SAN-1', 'SAN-2'])
-        :param group: A group or list of groups the returned experiments have to be in.
-                    E.g. 'SAN-GRP-1', ['SAN-GRP-1', 'SAN-GRP-2']
-        :param state: A state or list of experiment states.
-                    E.g. 'Succeeded' or ['Succeeded', 'Preempted']
-                    Possible states: 'Creating', 'Waiting', 'Initializing', 'Running',
-                        'Cleaning', 'Crashed', 'Failed', 'Aborted', 'Preempted', 'Succeeded'
-        :param owner: The owner or list of owners of the experiments. This parameter expects usernames.
-        :param tag: A tag or a list of experiment tags. E.g. 'solution-1' or ['solution-1', 'solution-2'].
-        :param min_running_time: Minimum running time of an experiment in seconds.
+        Returns:
+            :obj: `pandas.DataFrame`: Neptune experiment view in the form of a dataframe.
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> from neptunelib.credentials import Credentials
+            >>> session = Session(credentials=Credentials.from_env())
+
+            Fetch a project.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+
+            Finally, get a dataframe that resembles experiment view. It is constructed from all the
+            experiments that satisfy your criteria:
+
+            >>> project.get_leaderboard(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+        Todo:
+            tags - is it ok now?
         """
-        # TODO: tags - czy teraz jest ok?
+
         leaderboard_entries = self._fetch_leaderboard(id, group, state, owner, tag, min_running_time)
 
         def make_row(entry):
@@ -128,10 +215,43 @@ class Project(object):
         return df
 
     def get_experiment_groups(self):
-        """
-        Retrieve a list of groups in the project.
+        """Retrieve a list of groups in the project.
 
-        :return: A list of group of group IDs, e.g. ['SAN-GRP-1', 'SAN-GRP-2'].
+        Groups are created when one runs a grid search over hyperparameters.
+        By using this method you can quickly get all those experiment ids.
+
+        Returns:
+            list: A list of group IDs, e.g. ['SAN-GRP-1', 'SAN-GRP-2'].
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> from neptunelib.credentials import Credentials
+            >>> session = Session(credentials=Credentials.from_env())
+
+            Fetch a project.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+
+            Finally, get experiment groups from the project.
+
+            >>> project.get_experiment_groups()
+            ['SAL-GRP-1',
+             'SAL-GRP-2',
+             'SAL-GRP-4',
+             'SAL-GRP-6',
+             'SAL-GRP-7',
+             'SAL-GRP-8',
+             'SAL-GRP-9',
+             'SAL-GRP-10',
+             'SAL-GRP-12',
+             'SAL-GRP-13',
+             'SAL-GRP-15',
+             'SAL-GRP-17',
+             'SAL-GRP-19',
+             'SAL-GRP-20',
+             'SAL-GRP-23']
         """
         group_entries = self.client.get_leaderboard_entries(namespace=self.namespace,
                                                             project_name=self.name,
@@ -140,6 +260,8 @@ class Project(object):
 
     @property
     def full_id(self):
+        """Creates a full project id by combining the namespace and project name.
+        """
         return '{}/{}'.format(self.namespace, self.name)
 
     def __str__(self):
