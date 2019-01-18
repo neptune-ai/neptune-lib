@@ -35,7 +35,7 @@ class Experiment(object):
         client(:obj: `neptunelib.Client'): Client object
         leaderboard_entry(:obj: `neptunelib.model.LeaderboardEntry`): LeaderboardEntry object
     
-    Example:
+    Examples:
         Instantiate a session.
             
         >>> from neptunelib.session import Session
@@ -64,7 +64,7 @@ class Experiment(object):
     def id(self):
         """ Experiment short id
         
-        Example:
+        Examples:
             Instantiate a session.
 
             >>> from neptunelib.session import Session
@@ -98,7 +98,7 @@ class Experiment(object):
         Returns:
             :obj: `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
             
-        Example:
+        Examples:
             Instantiate a session.
 
             >>> from neptunelib.session import Session
@@ -128,7 +128,7 @@ class Experiment(object):
         Returns: 
             A dictionary mapping a channel name to its type.
             
-        Example:
+        Examples:
             Instantiate a session.
 
             >>> from neptunelib.session import Session
@@ -160,8 +160,26 @@ class Experiment(object):
         Returns:
             :obj: `pandas.DataFrame`: Dataframe that has 1 row containing a column for every parameter.
             
-        Example:
-            >>>
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> from neptunelib.credentials import Credentials
+            >>> session = Session(credentials=Credentials.from_env())
+
+            Fetch a project and a list of experiments.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+            >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+            Get an experiment instance.
+
+            >>> experiment = experiments[0]
+            
+            Get experiment parameters.
+            
+            >>> experiment.parameters
+            
         """
         return self._simple_dict_to_dataframe(self._leaderboard_entry.parameters)
 
@@ -172,7 +190,7 @@ class Experiment(object):
         Returns:
             :obj: `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
         
-        Example:
+        Examples:
             Instantiate a session.
 
             >>> from neptunelib.session import Session
@@ -218,7 +236,7 @@ class Experiment(object):
         Returns:
             :obj: `pandas.DataFrame`: Dataframe containing the hardware utilization metrics throughout the experiment.
             
-        Example:
+        Examples:
             Instantiate a session.
 
             >>> from neptunelib.session import Session
@@ -264,7 +282,7 @@ class Experiment(object):
         Returns:
             :obj: `pandas.DataFrame`: Dataframe containing the values for the requested numerical channels.
             
-        Example:
+        Examples:
             Instantiate a session.
 
             >>> from neptunelib.session import Session

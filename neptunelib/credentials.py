@@ -35,7 +35,8 @@ class Credentials(object):
         api_token:  This is a secret API key that was passed at instantiation.
         API_TOKEN_ENV_NAME: Neptune api token environment variable name 'NEPTUNE_API_TOKEN'.
 
-    Example:        
+    Examples:  
+    
         >>> from neptunelib.credentials import Credentials
         >>> credentials=Credentials('YOUR_NEPTUNE_API_KEY')
         
@@ -70,7 +71,8 @@ class Credentials(object):
             When running your code in Neptune's Jupyter notebook, or via `neptune send`,
             this variable is set to a valid API key.
 
-        Example:
+        Examples:
+        
             >>> from neptunelib.credentials import Credentials
             >>> credentials=Credentials.from_env()
         
@@ -91,7 +93,8 @@ class Credentials(object):
         Returns:
             str: URL address of the Neptune API associated with the credentials.
         
-        Example:
+        Examples:
+        
             >>> from neptunelib.credentials import Credentials
             >>> credentials=Credentials.from_env()
             >>> credentials.api_address

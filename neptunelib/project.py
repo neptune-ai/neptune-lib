@@ -21,6 +21,8 @@ from neptunelib.utils import as_list, map_keys
 
 
 class Project(object):
+    # pylint: disable=redefined-builtin
+
     """It contains all the information about a Neptune project
     
     You can extract the experiment view in a form of a dataframe or a list of experiments.
@@ -40,7 +42,7 @@ class Project(object):
                organization or user you want as long as you know their namespace.
         name(str): short project name.
         
-    Example:
+    Examples:
         Instantiate a session.
             
         >>> from neptunelib.session import Session
@@ -58,7 +60,6 @@ class Project(object):
         Explain what internal_id is
        
     """
-    # pylint: disable=redefined-builtin
 
     def __init__(self, client, internal_id, namespace, name):
         self.client = client
@@ -72,7 +73,8 @@ class Project(object):
         Returns:
             list: A list of usernames of project members.
         
-        Example:
+        Examples:
+        
             >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
             >>> project.get_members()
             
@@ -105,7 +107,7 @@ class Project(object):
         Returns:
             list: List of `Experiment` objects
             
-        Example:
+        Examples:
             Instantiate a session.
             
             >>> from neptunelib.session import Session
@@ -169,7 +171,7 @@ class Project(object):
         Returns:
             :obj: `pandas.DataFrame`: Neptune experiment view in the form of a dataframe. 
         
-        Example:
+        Examples:
             Instantiate a session.
             
             >>> from neptunelib.session import Session
@@ -220,8 +222,7 @@ class Project(object):
         Returns:
             list: A list of group IDs, e.g. ['SAN-GRP-1', 'SAN-GRP-2'].
             
-        Example:
-            
+        Examples:
             Instantiate a session.
             
             >>> from neptunelib.session import Session
