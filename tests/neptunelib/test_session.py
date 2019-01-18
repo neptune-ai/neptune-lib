@@ -45,7 +45,7 @@ class TestSession(unittest.TestCase):
         session = Session(API_TOKEN)
 
         # then
-        self.assertEqual(session.api_token, API_TOKEN)
+        self.assertEqual(API_TOKEN, session.api_token)
 
         # and
         os_getenv.assert_not_called()
