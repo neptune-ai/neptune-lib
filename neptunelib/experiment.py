@@ -22,7 +22,7 @@ from neptunelib.utils import map_values
 
 class Experiment(object):
     """It contains all the information about a Neptune Experiment
-    
+
     This class lets you extract experiment:
         - short experiment id
         - names of all the channels
@@ -30,32 +30,33 @@ class Experiment(object):
         - parameters
         - numerical channel values
         - information about the hardware utilization during the exeperiment
-    
+
     Args:
         client(:obj: `neptunelib.Client'): Client object
         leaderboard_entry(:obj: `neptunelib.model.LeaderboardEntry`): LeaderboardEntry object
-    
+
     Examples:
         Instantiate a session.
-            
+
         >>> from neptunelib.session import Session
         >>> from neptunelib.credentials import Credentials
         >>> session = Session(credentials=Credentials.from_env())
-            
+
         Fetch a project and a list of experiments.
-            
+
         >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
         >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
-        
+
         Get an experiment instance.
-        
+
         >>> experiment = experiments[0]
         >>> experiment
         Experiment(SAL-1609)
-        
+
     Todo:
         Column sorting
     """
+
     def __init__(self, client, leaderboard_entry):
         self._client = client
         self._leaderboard_entry = leaderboard_entry
@@ -63,7 +64,7 @@ class Experiment(object):
     @property
     def id(self):
         """ Experiment short id
-        
+
         Examples:
             Instantiate a session.
 
@@ -79,9 +80,9 @@ class Experiment(object):
             Get an experiment instance.
 
             >>> experiment = experiments[0]
-            
+
             Get experiment short id.
-            
+
             >>> experiment.id
             'SAL-1609'
 
@@ -91,13 +92,13 @@ class Experiment(object):
     @property
     def system_properties(self):
         """Retrieve system properties like owner, times of creation and completion, worker type, etc.
-       
+
         Note:
             The list of supported system properties changes over time.
 
         Returns:
             :obj: `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
-            
+
         Examples:
             Instantiate a session.
 
@@ -113,11 +114,11 @@ class Experiment(object):
             Get an experiment instance.
 
             >>> experiment = experiments[0]
-            
+
             Get experiment system properties.
-            
+
             >>> experiment.system_properties
-            
+
         """
         return self._simple_dict_to_dataframe(self._leaderboard_entry.system_properties)
 
@@ -125,9 +126,9 @@ class Experiment(object):
     def channels(self):
         """Retrieve all channel names along with their types for this experiment.
 
-        Returns: 
+        Returns:
             A dictionary mapping a channel name to its type.
-            
+
         Examples:
             Instantiate a session.
 
@@ -143,11 +144,11 @@ class Experiment(object):
             Get an experiment instance.
 
             >>> experiment = experiments[0]
-            
+
             Get experiment channels.
-            
+
             >>> experiment.channels
-            
+
         """
         return dict(
             (ch.name, ch.type) for ch in self._leaderboard_entry.channels
@@ -156,10 +157,10 @@ class Experiment(object):
     @property
     def parameters(self):
         """Retrieve parameters for this experiment.
-        
+
         Returns:
             :obj: `pandas.DataFrame`: Dataframe that has 1 row containing a column for every parameter.
-            
+
         Examples:
             Instantiate a session.
 
@@ -175,11 +176,11 @@ class Experiment(object):
             Get an experiment instance.
 
             >>> experiment = experiments[0]
-            
+
             Get experiment parameters.
-            
+
             >>> experiment.parameters
-            
+
         """
         return self._simple_dict_to_dataframe(self._leaderboard_entry.parameters)
 
@@ -189,7 +190,7 @@ class Experiment(object):
 
         Returns:
             :obj: `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
-        
+
         Examples:
             Instantiate a session.
 
@@ -205,11 +206,11 @@ class Experiment(object):
             Get an experiment instance.
 
             >>> experiment = experiments[0]
-            
+
             Get experiment properties.
-            
+
             >>> experiment.properties
-            
+
         """
         return self._simple_dict_to_dataframe(self._leaderboard_entry.properties)
 
@@ -235,7 +236,7 @@ class Experiment(object):
 
         Returns:
             :obj: `pandas.DataFrame`: Dataframe containing the hardware utilization metrics throughout the experiment.
-            
+
         Examples:
             Instantiate a session.
 
@@ -251,11 +252,11 @@ class Experiment(object):
             Get an experiment instance.
 
             >>> experiment = experiments[0]
-            
+
             Get hardware utilization channels.
-            
+
             >>> experiment.get_hardware_utilization
-            
+
         """
         metrics_csv = self._client.get_metrics_csv(self._leaderboard_entry.internal_id)
         try:
@@ -275,13 +276,13 @@ class Experiment(object):
         x_loss, y_loss, x_auc, y_auc
 
         The returned DataFrame may contain NaNs if one of the channels has more values than others.
-        
+
         Args:
             channel_names: Names of the channels to retrieve values for.
-        
+
         Returns:
             :obj: `pandas.DataFrame`: Dataframe containing the values for the requested numerical channels.
-            
+
         Examples:
             Instantiate a session.
 
@@ -297,11 +298,11 @@ class Experiment(object):
             Get an experiment instance.
 
             >>> experiment = experiments[0]
-            
+
             Get numeric channel value for channels 'unet_0 batch sum loss' and 'Learning Rate'.
-            
+
             >>> experiments[0].get_numeric_channels_values('unet_0 batch sum loss', 'Learning Rate')
-            
+
         """
 
         channels_data = {}
