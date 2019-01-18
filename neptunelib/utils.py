@@ -14,11 +14,7 @@
 # limitations under the License.
 #
 
-from __future__ import (absolute_import, division,
-                        print_function, unicode_literals)
-from builtins import *
-
-from functools import reduce
+import functools
 
 import numpy as np
 import pandas as pd
@@ -62,8 +58,8 @@ def get_channel_name_stems(columns):
 
 
 def merge_dataframes(dataframes, on, how='outer'):
-    merged_df = reduce(lambda left, right: pd.merge(left, right, on=on, how=how),
-                       dataframes)
+    merged_df = functools.reduce(lambda left, right: \
+                                     pd.merge(left, right, on=on, how=how), dataframes)
     return merged_df
 
 
