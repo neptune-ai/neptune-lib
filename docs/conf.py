@@ -86,9 +86,10 @@ html_theme = 'sphinx_rtd_theme'
 # documentation.
 #
 html_theme_options = {
+    'canonical_url': 'https://neptune-lib.readthedocs.io/',
     'display_version': True,
     'prev_next_buttons_location': 'bottom',
-    'navigation_depth': 4
+    'navigation_depth': 4,
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
