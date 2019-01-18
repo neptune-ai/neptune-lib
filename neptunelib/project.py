@@ -182,7 +182,8 @@ class Project(object):
 
             >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
 
-            Finally, get a dataframe that resembles experiment view, constructed from all the experiments that satisfy your criteria:
+            Finally, get a dataframe that resembles experiment view. It is constructed from all the
+            experiments that satisfy your criteria:
 
             >>> project.get_leaderboard(state=['aborted'], owner=['neyo'], min_running_time=100000)
 

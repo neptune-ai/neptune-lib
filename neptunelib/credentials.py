@@ -40,8 +40,8 @@ class Credentials(object):
         >>> from neptunelib.credentials import Credentials
         >>> credentials=Credentials('YOUR_NEPTUNE_API_KEY')
 
-        Alternatively you can create an environmental variable by running `export NEPTUNE_API_TOKEN=YOUR_API_TOKEN` which will allow
-        you to use the `.from_env()` method.
+        Alternatively you can create an environmental variable by running `export NEPTUNE_API_TOKEN=YOUR_API_TOKEN`
+            which will allow you to use the `.from_env()` method.
 
          >>> credentials=Credentials.from_env()
 
