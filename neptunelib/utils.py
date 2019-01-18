@@ -14,6 +14,12 @@
 # limitations under the License.
 #
 
+from functools import reduce
+
+import numpy as np
+import pandas as pd
+
+
 def map_values(f_value, dictionary):
     return dict(
         (k, f_value(v)) for k, v in dictionary.items()
@@ -31,3 +37,42 @@ def as_list(value):
         return value
     else:
         return [value]
+
+    
+def join_channels_on_x(df):
+    x_max = _get_max_x(df)
+    joined_x = pd.DataFrame({'x':list(range(x_max+1))})
+    channel_dfs = _split_df(df)
+    
+    joined_dfs = []
+    for channel_df in channel_dfs:
+        aligned_df = pd.merge(joined_x, channel_df, on='x')
+        joined_dfs.append(aligned_df)
+        
+    joined_dfs = merge_dataframes(joined_dfs, on='x', how='outer')
+    return joined_dfs
+
+    
+def get_channel_name_stems(columns):
+    return list(set([col[2:] for col in columns]))
+
+
+def merge_dataframes(data_frames, on, how='outer'):
+    merged_df = reduce(lambda  left, right: pd.merge(left,right, on=on, how=how), 
+                       data_frames)
+    return merged_df
+
+
+def _get_max_x(df):
+    x_cols = [col for col in df.columns if col.startswith('x_')]
+    x_maxes = [df[col].max() for col in x_cols]
+    return int(np.max(x_maxes))
+
+
+def _split_df(df):
+    channel_dfs = []
+    for stem in get_channel_name_stems(df.columns):
+        channel_df = df[['x_{}'.format(stem),'y_{}'.format(stem)]]
+        channel_df.columns = ['x', stem]
+        channel_dfs.append(channel_df)
+    return channel_dfs

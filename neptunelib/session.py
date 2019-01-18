@@ -16,7 +16,7 @@
 
 from neptunelib.client import Client
 from neptunelib.credentials import Credentials
-from neptunelib.project import Project
+from project import Project
 
 
 class Session(object):

@@ -17,7 +17,7 @@
 import pandas as pd
 from pandas.errors import EmptyDataError
 
-from neptunelib.utils import map_values
+from neptunelib.utils import map_values, join_channels_on_x
 
 
 class Experiment(object):
@@ -99,7 +99,7 @@ class Experiment(object):
         except EmptyDataError:
             return pd.DataFrame()
 
-    def get_numeric_channels_values(self, *channel_names):
+    def get_numeric_channels_values(self, *channel_names, align_on_x=False):
         """
         Retrieve values of specified numeric channels.
 
@@ -114,6 +114,7 @@ class Experiment(object):
         The returned DataFrame may contain NaNs if one of the channels has more values than others.
 
         :param channel_names: Names of the channels to retrieve values for.
+        :param aligh_x: Bool whether to join all `x_` channels into one `x` channel.
         :return: A `pandas.DataFrame` containing the values for the requested channels.
         """
 
@@ -131,7 +132,10 @@ class Experiment(object):
                     columns=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
                 )
 
-        return pd.concat(channels_data.values(), axis=1, sort=False)
+        if align_on_x:
+            return join_channels_on_x(pd.concat(channels_data.values(), axis=1, sort=False))
+        else:
+            return pd.concat(channels_data.values(), axis=1, sort=False)
 
     def __str__(self):
         return 'Experiment({})'.format(self.id)
@@ -148,3 +152,9 @@ class Experiment(object):
     @staticmethod
     def _simple_dict_to_dataframe(d):
         return pd.DataFrame.from_dict(map_values(lambda x: [x], d))
+    
+    
+
+
+
+
