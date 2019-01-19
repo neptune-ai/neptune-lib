@@ -23,13 +23,9 @@ from neptunelib.utils import map_values
 class Experiment(object):
     """It contains all the information about a Neptune Experiment
 
-    This class lets you extract experiment by
-    - short experiment id
-    - names of all the channels
-    - system properties and other properties
-    - parameters
-    - numerical channel values
-    - information about the hardware utilization during the experiment
+    This class lets you extract experiment by, short experiment id, names of all the channels,
+    system properties and other properties, parameters, numerical channel values,
+    information about the hardware utilization during the experiment
 
     Args:
         client(`neptunelib.Client'): Client object
