@@ -3,7 +3,7 @@ Welcome to Neptune Library
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: API Reference:
 
    User credentials <credentials>
    Session <session>

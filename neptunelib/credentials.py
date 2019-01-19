@@ -41,9 +41,9 @@ class Credentials(object):
         >>> credentials=Credentials('YOUR_NEPTUNE_API_KEY')
 
         Alternatively you can create an environmental variable by running `export NEPTUNE_API_TOKEN=YOUR_API_TOKEN`
-            which will allow you to use the `.from_env()` method.
+        which will allow you to use the `.from_env()` method.
 
-         >>> credentials=Credentials.from_env()
+        >>> credentials=Credentials.from_env()
 
     Note:
         For security reasons it is recommended to use the `.from_env()` method to create a instantiate Credentials.
@@ -63,7 +63,7 @@ class Credentials(object):
         environment variable.
 
         Returns:
-            :obj: `Credentials`: Neptune Credentials object.
+            `neptune.credentials.Credentials`: Neptune Credentials object.
 
         Note:
             You can retrieve a valid Neptune API key with `neptune account api-key get`.
