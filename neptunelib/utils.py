@@ -40,7 +40,7 @@ def as_list(value):
 
 
 def align_channels_on_x(dataframe):
-    common_x, channel_dfs = _split_df_by_stems(dataframe)
+    channel_dfs, common_x = _split_df_by_stems(dataframe)
 
     aligned_dfs = []
     for channel_df in channel_dfs:
@@ -66,19 +66,14 @@ def sort_df_by_columns(df):
     return df
 
 
-def _get_max_x(df):
-    x_cols = [col for col in df.columns if col.startswith('x_')]
-    x_maxes = [df[col].max() for col in x_cols]
-    return int(np.max(x_maxes))
-
-
 def _split_df_by_stems(df):
     channel_dfs, x_vals = [], []
     for stem in get_channel_name_stems(df.columns):
         channel_df = df[['x_{}'.format(stem), 'y_{}'.format(stem)]]
         channel_df.columns = ['x', stem]
+        channel_df.dropna(inplace=True)
+        channel_df['x'] = channel_df['x'].astype(int)
         channel_dfs.append(channel_df)
-        x_vals.append(channel_df['x'].tolist())
-        
-    common_x = pd.DataFrame(sorted(list(set(x_vals))), columns=['x'])
+        x_vals.extend(channel_df['x'].tolist())
+    common_x = pd.DataFrame({'x': np.unique(x_vals)})
     return channel_dfs, common_x
