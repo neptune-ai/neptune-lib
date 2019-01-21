@@ -23,17 +23,13 @@ from neptunelib.utils import map_values, align_channels_on_x
 class Experiment(object):
     """It contains all the information about a Neptune Experiment
 
-    This class lets you extract experiment:
-        - short experiment id
-        - names of all the channels
-        - system properties and other properties
-        - parameters
-        - numerical channel values
-        - information about the hardware utilization during the experiment
+    This class lets you extract experiment by, short experiment id, names of all the channels,
+    system properties and other properties, parameters, numerical channel values,
+    information about the hardware utilization during the experiment
 
     Args:
-        client(:obj: `neptunelib.Client'): Client object
-        leaderboard_entry(:obj: `neptunelib.model.LeaderboardEntry`): LeaderboardEntry object
+        client(`neptunelib.Client'): Client object
+        leaderboard_entry(`neptunelib.model.LeaderboardEntry`): LeaderboardEntry object
 
     Examples:
         Instantiate a session.
@@ -91,11 +87,8 @@ class Experiment(object):
     def system_properties(self):
         """Retrieve system properties like owner, times of creation and completion, worker type, etc.
 
-        Note:
-            The list of supported system properties changes over time.
-
         Returns:
-            :obj: `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
+            `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
 
         Examples:
             Instantiate a session.
@@ -116,6 +109,9 @@ class Experiment(object):
 
             >>> experiment.system_properties
 
+        Note:
+            The list of supported system properties may change over time.
+
         """
         return self._simple_dict_to_dataframe(self._leaderboard_entry.system_properties)
 
@@ -124,7 +120,7 @@ class Experiment(object):
         """Retrieve all channel names along with their types for this experiment.
 
         Returns:
-            A dictionary mapping a channel name to its type.
+            dict: A dictionary mapping a channel name to its type.
 
         Examples:
             Instantiate a session.
@@ -155,7 +151,7 @@ class Experiment(object):
         """Retrieve parameters for this experiment.
 
         Returns:
-            :obj: `pandas.DataFrame`: Dataframe that has 1 row containing a column for every parameter.
+            `pandas.DataFrame`: Dataframe that has 1 row containing a column for every parameter.
 
         Examples:
             Instantiate a session.
@@ -184,7 +180,7 @@ class Experiment(object):
         """Retrieve user-defined properties for this experiment.
 
         Returns:
-            :obj: `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
+            `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
 
         Examples:
             Instantiate a session.
@@ -229,7 +225,7 @@ class Experiment(object):
         The returned DataFrame may contain NaNs if one of the metrics has more values than others.
 
         Returns:
-            :obj: `pandas.DataFrame`: Dataframe containing the hardware utilization metrics throughout the experiment.
+            `pandas.DataFrame`: Dataframe containing the hardware utilization metrics throughout the experiment.
 
         Examples:
             Instantiate a session.
@@ -269,10 +265,10 @@ class Experiment(object):
         The returned DataFrame may contain NaNs if one of the channels has more values than others.
 
         Args:
-            channel_names: Names of the channels to retrieve values for.
+            *channel_names: variable length list of names of the channels to retrieve values for.
 
         Returns:
-            :obj: `pandas.DataFrame`: Dataframe containing the values for the requested numerical channels.
+            `pandas.DataFrame`: Dataframe containing the values for the requested numerical channels.
 
         Examples:
             Instantiate a session.
