@@ -96,9 +96,9 @@ class Project(object):
             group(list): A group or list of groups the returned experiments have to be in.
                 E.g. 'SAN-GRP-1', ['SAN-GRP-1', 'SAN-GRP-2']
             state(list): A state or list of experiment states.
-                E.g. 'succeeded' or ['succeeded', 'preempted']
-                Possible states: 'creating', 'waiting', 'initializing', 'running',
-                    'cleaning', 'crashed', 'failed', 'aborted', 'preempted', 'succeeded'
+                E.g. 'succeeded' or ['succeeded', 'preempted'].
+                Possible states: 'creating', 'waiting', 'initializing', 'running', 'cleaning',
+                'crashed', 'failed', 'aborted', 'preempted', 'succeeded'
             owner(list): The owner or list of owners of the experiments. This parameter expects usernames.
             tag(list): A tag or a list of experiment tags. E.g. 'solution-1' or ['solution-1', 'solution-2'].
             min_running_time(int): Minimum running time of an experiment in seconds.

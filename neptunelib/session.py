@@ -69,7 +69,7 @@ class Session(object):
 
         Returns:
             dict: Dictionary of "NAMESPACE/PROJECT_NAME" and `neptunelib.project.Project` object pairs that contains
-                all the projects that belong to the selected namespace.
+            all the projects that belong to the selected namespace.
 
         Examples:
             First, you need to create a Session instance:
