@@ -29,11 +29,11 @@ class Credentials(object):
     Otherwise, refer to the more secure `from_env` method.
 
     Args:
-        api_token(str): This is a secret API key that you can retrieve by running `neptune account api-token get <org>`.
+        api_token(str): This is a secret API key that you can retrieve by running
+            `$ neptune account api-token get`
 
     Attributes:
         api_token:  This is a secret API key that was passed at instantiation.
-        API_TOKEN_ENV_NAME: Neptune api token environment variable name 'NEPTUNE_API_TOKEN'.
 
     Examples:
 
