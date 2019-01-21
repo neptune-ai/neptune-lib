@@ -25,7 +25,7 @@ class Session(object):
     In order to query Neptune experiment database in any way you have to instantiate this object first.
 
     Args:
-        api_token(str): This is a secret API key that you can retrieve by running 
+        api_token(str): This is a secret API key that you can retrieve by running
             `$ neptune account api-token get`.
 
     Attributes:
