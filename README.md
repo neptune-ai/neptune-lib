@@ -75,11 +75,8 @@ If you get stuck, don't worry we are here to help.
 The best order of communication is:
 
  * [neptune community forum](https://community.neptune.ml/)
- * [neptune community slack](https://neptune-community.slack.com)
+ * [neptune community slack](https://neptune-community.slack.com) (join by going [here](https://join.slack.com/t/neptune-community/shared_invite/enQtNTI4Mjg3ODk2MjQwLWE5YjI0YThiODViNDY4MDBlNmRmZTkwNTE3YzNiMjQ5MGM2ZTFhNzhjN2YzMTIwNDM3NjQyZThmMDk1Y2Q1ZjY))
  * Github issues
- 
- **slack invitation link**
- [link](https://join.slack.com/t/neptune-community/shared_invite/enQtNTI2NDI0ODE2MTkyLWM5OGVjMTdkN2JkNDgyOGQzNjZlNmIxMDg1MGFiZGFkZmI0MzEwYjFhYTBhNjIzNmEzNjhiMDgxMmM0YWQ5NTA)
  
 # Contributing
 If you see something that you don't like you are more than welcome to contribute!
