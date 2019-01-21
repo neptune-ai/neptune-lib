@@ -50,7 +50,8 @@ experiments = project.get_experiments(id=['SAL-2342'])
 experiment = experiments[0]
 ```
 
-1. get numeric channel values dataframe
+1. get numeric channel values dataframe.
+Lets take the `network_1 epoch_val iou loss` channel for example (long name I know).
     
 ```python
     channel_df = experiment.get_numeric_channels_values('network_1 epoch_val iou loss')
