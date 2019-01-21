@@ -50,7 +50,7 @@ class Credentials(object):
 
     Note:
         For security reasons it is recommended to use the `.from_env()` method to create a instantiate Credentials.
-        You can create an environmental variable that stores your api token.
+        You can create an environment variable that stores your api token.
         You can do that by going to your console and running:
 
         $ export NEPTUNE_API_TOKEN=YOUR_API_TOKEN`
