@@ -29,14 +29,14 @@ class Project(object):
     Project lets you do filtering based on conditions not to fetch the entire, sometimes huge list of experiments.
 
     Args:
-        client(:obj: `neptunelib.Client`): Clien object
+        client(`neptunelib.Client`): Client object
         internal_id:
         namespace(str): It can either be your organization or user name. You can list all the public projects for any
                organization or user you want as long as you know their namespace.
         name(str): short project name.
 
     Attributes:
-        client:
+        client(`neptunelib.Client`): Client object
         internal_id:
         namespace(str): It can either be your organization or user name. You can list all the public projects for any
                organization or user you want as long as you know their namespace.
@@ -167,7 +167,7 @@ class Project(object):
             min_running_time(int): Minimum running time of an experiment in seconds.
 
         Returns:
-            :obj: `pandas.DataFrame`: Neptune experiment view in the form of a dataframe.
+            `pandas.DataFrame`: Neptune experiment view in the form of a dataframe.
 
         Examples:
             Instantiate a session.
@@ -298,9 +298,9 @@ class Project(object):
         }
 
         def key(c):
-            """
-            A sorting key for a column name:
-                system properties first, then channels, parameters, user-defined properties.
+            """A sorting key for a column name.
+
+            Sorts by the system properties first, then channels, parameters, user-defined properties.
 
             Within each group columns are sorted alphabetically, except for system properties,
             where order is custom.
