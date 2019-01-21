@@ -24,11 +24,11 @@ class Session(object):
 
     In order to query Neptune experiment database in any way you have to instantiate this object first.
 
-    Attributes:
-        api_token(str): This is a secret API key that you can retrieve by running `neptune account api-token get <org>`.
-
     Args:
-        api_token(str): This is a secret API key that you can retrieve by running `neptune account api-token get <org>`.
+        api_token(str): This is a secret API key that you can retrieve by running 
+            `$ neptune account api-token get`.
+
+    Attributes:
         credentials (:obj:`Credentials`): `Credentials` object instance that authenticates your calls to Neptune API.
 
     Examples:
@@ -50,7 +50,6 @@ class Session(object):
     def __init__(self, api_token=None):
         credentials = Credentials(api_token) if api_token else Credentials.from_env()
 
-        self.api_token = api_token
         self.credentials = credentials
         self._client = Client(self.credentials.api_address, self.credentials.api_token)
 
