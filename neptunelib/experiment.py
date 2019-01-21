@@ -29,7 +29,7 @@ class Experiment(object):
         - system properties and other properties
         - parameters
         - numerical channel values
-        - information about the hardware utilization during the exeperiment
+        - information about the hardware utilization during the experiment
 
     Args:
         client(:obj: `neptunelib.Client'): Client object
