@@ -1,14 +1,14 @@
-.. neptune-lib documentation master file, on Fri Jan 18 15:08:36 2019.
-   Root `toctree` directive is obligatory
-
-Welcome to neptune-lib's documentation!
-=======================================
+Welcome to Neptune Library
+==========================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-
+   User credentials <credentials>
+   Session <session>
+   Project <project>
+   Experiment <experiment>
 
 Indices and tables
 ==================

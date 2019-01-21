@@ -14,13 +14,21 @@ neptune account api-token get
 ### Establish session
 
 ```python
-from neptunelib.credentials import Credentials
-credentials = Credentials(api_token=`YOUR_NEPTUNE_API_TOKEN`)
+from neptunelib.session import Session
+session = Session(api_token='YOUR_NEPTUNE_API_TOKEN')
 ```
+
+you can also create an environment variable `NEPTUNE_API_TOKEN`:
+
+```bash
+export NEPTUNE_API_TOKEN=YOUR_NEPTUNE_API_TOKEN`
+```
+
+and simpy go
 
 ```python
 from neptunelib.session import Session
-session = Session(credentials=credentials)
+session = Session()
 ```
 
 ### Instatiate a Project object

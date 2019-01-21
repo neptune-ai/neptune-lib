@@ -29,7 +29,7 @@ class Experiment(object):
         - system properties and other properties
         - parameters
         - numerical channel values
-        - information about the hardware utilization during the exeperiment
+        - information about the hardware utilization during the experiment
 
     Args:
         client(:obj: `neptunelib.Client'): Client object
@@ -39,8 +39,7 @@ class Experiment(object):
         Instantiate a session.
 
         >>> from neptunelib.session import Session
-        >>> from neptunelib.credentials import Credentials
-        >>> session = Session(credentials=Credentials.from_env())
+        >>> session = Session()
 
         Fetch a project and a list of experiments.
 
@@ -69,8 +68,7 @@ class Experiment(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project and a list of experiments.
 
@@ -103,8 +101,7 @@ class Experiment(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project and a list of experiments.
 
@@ -133,8 +130,7 @@ class Experiment(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project and a list of experiments.
 
@@ -165,8 +161,7 @@ class Experiment(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project and a list of experiments.
 
@@ -195,8 +190,7 @@ class Experiment(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project and a list of experiments.
 
@@ -241,8 +235,7 @@ class Experiment(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project and a list of experiments.
 
@@ -285,8 +278,7 @@ class Experiment(object):
             Instantiate a session.
 
             >>> from neptunelib.session import Session
-            >>> from neptunelib.credentials import Credentials
-            >>> session = Session(credentials=Credentials.from_env())
+            >>> session = Session()
 
             Fetch a project and a list of experiments.
 
