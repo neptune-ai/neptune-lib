@@ -78,7 +78,7 @@ class Project(object):
             >>> project.get_members()
 
         """
-        project_members = self.client.get_project_members(self.namespace, self.name)
+        project_members = self.client.get_project_members(self.internal_id)
         return [member.registeredMemberInfo.username for member in project_members if member.registeredMemberInfo]
 
     def get_experiments(self, id=None, group=None, state=None, owner=None, tag=None, min_running_time=None):

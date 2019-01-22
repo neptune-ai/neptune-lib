@@ -48,7 +48,7 @@ class TestProject(unittest.TestCase):
         fetched_member_usernames = self.project.get_members()
 
         # then
-        self.client.get_project_members.assert_called_once_with(self.project.namespace, self.project.name)
+        self.client.get_project_members.assert_called_once_with(self.project.internal_id)
 
         # and
         self.assertEqual(member_usernames, fetched_member_usernames)
