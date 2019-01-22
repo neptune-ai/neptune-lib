@@ -21,7 +21,7 @@ import pandas as pd
 from pandas.util.testing import assert_frame_equal
 
 from neptunelib.utils import map_keys, map_values, as_list, align_channels_on_x, get_channel_name_stems, \
-    merge_dataframes, sort_df_by_columns
+    merge_dataframes
 
 
 class TestMapValues(unittest.TestCase):
@@ -76,31 +76,87 @@ class TestAsList(unittest.TestCase):
 
 class TestAlignChannelsOnX(unittest.TestCase):
 
-    def setUp(self):
+    def test_ordered_x(self):
+        # when
         np.random.seed(1234)
         random_batch = np.random.random(10).tolist()
         random_epoch = np.random.random(5).tolist()
         random_odd = np.random.random(7).tolist()
 
-        self.df = pd.DataFrame({'x_batch_channel': list(range(10)),
-                                'y_batch_channel': random_batch,
-                                'x_epoch_channel': list(range(5)) + [np.nan] * 5,
-                                'y_epoch_channel': random_epoch + [np.nan] * 5,
-                                'x_odd_channel': list(range(7)) + [np.nan] * 3,
-                                'y_odd_channel': random_odd + [np.nan] * 3})
+        df = pd.DataFrame({'x_batch_channel': list(range(10)),
+                           'y_batch_channel': random_batch,
+                           'x_epoch_channel': list(range(5)) + [np.nan] * 5,
+                           'y_epoch_channel': random_epoch + [np.nan] * 5,
+                           'x_odd_channel': list(range(7)) + [np.nan] * 3,
+                           'y_odd_channel': random_odd + [np.nan] * 3}, dtype=float)
 
-        aligned_df = pd.DataFrame({'x': list(range(10)),
-                                   'batch_channel': random_batch,
-                                   'epoch_channel': random_epoch + [np.nan] * 5,
-                                   'odd_channel': random_odd + [np.nan] * 3})
+        expected_result = pd.DataFrame({'x': list(range(10)),
+                                        'batch_channel': random_batch,
+                                        'epoch_channel': random_epoch + [np.nan] * 5,
+                                        'odd_channel': random_odd + [np.nan] * 3}, dtype=float)
+        expected_result = sort_df_by_columns(expected_result)
 
-        self.aligned_df = sort_df_by_columns(aligned_df)
-
-    def test_aligned(self):
-        result = align_channels_on_x(self.df)
+        # then
+        result = align_channels_on_x(df)
         result = sort_df_by_columns(result)
 
-        assert_frame_equal(result, self.aligned_df)
+        assert_frame_equal(result, expected_result)
+
+    def test_shuffled_x(self):
+        # when
+
+        batch_x = [4, 2, 10, 28]
+        epoch_x = [np.nan] + [1, 2, 21]
+        odd_x = [21, 10, 15, 4]
+        detached_x = [3, 5, 9] + [np.nan]
+
+        batch_y = [7, 2, 9, 1]
+        epoch_y = [np.nan, 3, 5, 9]
+        odd_y = [21, 15, 4, 3]
+        detached_y = [1, 5, 12, np.nan]
+
+        df = pd.DataFrame({'x_batch_channel': batch_x, 'y_batch_channel': batch_y,
+                           'x_epoch_channel': epoch_x, 'y_epoch_channel': epoch_y,
+                           'x_odd_channel': odd_x, 'y_odd_channel': odd_y,
+                           'x_detached_channel': detached_x, 'y_detached_channel': detached_y}, dtype=float)
+
+        expected_result = pd.DataFrame({'x': [1, 2, 3, 4, 5, 9, 10, 15, 21, 28],
+                                        'batch_channel': [np.nan, 2, np.nan, 7, np.nan, np.nan, 9, np.nan, np.nan, 1],
+                                        'epoch_channel': [3, 5, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, 9,
+                                                          np.nan],
+                                        'odd_channel': [np.nan, np.nan, np.nan, 3, np.nan, np.nan, 15, 4, 21, np.nan],
+                                        'detached_channel': [np.nan, np.nan, 1, np.nan, 5, 12, np.nan, np.nan, np.nan,
+                                                             np.nan]}, dtype=float)
+        expected_result = sort_df_by_columns(expected_result)
+
+        # then
+        result = align_channels_on_x(df)
+        result = sort_df_by_columns(result)
+
+        assert_frame_equal(result, expected_result)
+
+    def test_fraction_x(self):
+        # when
+
+        batch_x = [1.2, 0.3, 0.9, 123.4]
+        epoch_x = [np.nan] + [1.7, 2.9, 4.5]
+
+        batch_y = [7.3, 2.1, 9.5, 1.2]
+        epoch_y = [np.nan, 0.35, 5.4, 0.9]
+
+        df = pd.DataFrame({'x_batch_channel': batch_x, 'y_batch_channel': batch_y,
+                           'x_epoch_channel': epoch_x, 'y_epoch_channel': epoch_y}, dtype=float)
+
+        expected_result = pd.DataFrame({'x': [0.3, 0.9, 1.2, 1.7, 2.9, 4.5, 123.4],
+                                        'batch_channel': [2.1, 9.5, 7.3, np.nan, np.nan, np.nan, 1.2],
+                                        'epoch_channel': [np.nan, np.nan, np.nan, 0.35, 5.4, 0.9, np.nan]}, dtype=float)
+        expected_result = sort_df_by_columns(expected_result)
+
+        # then
+        result = align_channels_on_x(df)
+        result = sort_df_by_columns(result)
+
+        assert_frame_equal(result, expected_result)
 
 
 class TestGetChannelNameStems(unittest.TestCase):
@@ -155,6 +211,11 @@ class TestSortDfByColumns(unittest.TestCase):
         shuffled_df = pd.DataFrame(columns=['c', 'a', '1', 'd', '3', '2', 'b'])
 
         assert_frame_equal(sort_df_by_columns(shuffled_df), sorted_df)
+
+
+def sort_df_by_columns(df):
+    df = df.reindex(sorted(df.columns), axis=1)
+    return df
 
 
 def times_2(x):

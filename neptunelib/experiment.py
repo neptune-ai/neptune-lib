@@ -302,11 +302,13 @@ class Experiment(object):
                 channels_data[channel_name] = pd.read_csv(
                     self._client.get_channel_points_csv(self._leaderboard_entry.internal_id, channel_id),
                     header=None,
-                    names=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
+                    names=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)],
+                    dtype=[float, float]
                 )
             except EmptyDataError:
                 channels_data[channel_name] = pd.DataFrame(
-                    columns=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
+                    columns=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)],
+                    dtype=[float, float]
                 )
 
         return align_channels_on_x(pd.concat(channels_data.values(), axis=1, sort=False))
