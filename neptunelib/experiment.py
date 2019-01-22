@@ -17,7 +17,7 @@
 import pandas as pd
 from pandas.errors import EmptyDataError
 
-from neptunelib.utils import map_values
+from neptunelib.utils import map_values, align_channels_on_x
 
 
 class Experiment(object):
@@ -254,15 +254,13 @@ class Experiment(object):
             return pd.DataFrame()
 
     def get_numeric_channels_values(self, *channel_names):
-        """Retrieve values of specified numeric channels.
+        """
+        Retrieve values of specified numeric channels.
 
-        The returned DataFrame contains 2 columns (x_*, y_*) for every requested channel.
-        The x_ and y_ columns contain the X and Y coordinate of each point in a channel respectively.
+        The returned DataFrame contains 1 additional column x along with the requested channels.
 
-        E.g. get_numeric_channels_values('loss', 'auc') will return a DataFrame
-        of the following structure:
-
-        x_loss, y_loss, x_auc, y_auc
+        E.g. get_numeric_channels_values('loss', 'auc') will return a DataFrame of the following structure:
+            x, loss, auc
 
         The returned DataFrame may contain NaNs if one of the channels has more values than others.
 
@@ -285,12 +283,16 @@ class Experiment(object):
 
             Get an experiment instance.
 
-            >>> experiment = experiments[0]
+            >>> exp = experiments[0]
 
-            Get numeric channel value for channels 'unet_0 batch sum loss' and 'Learning Rate'.
+            Get numeric channel value for channels 'unet_0 batch sum loss' and 'unet_1 batch sum loss'.
 
-            >>> experiments[0].get_numeric_channels_values('unet_0 batch sum loss', 'Learning Rate')
+            >>> batch_channels = exp.get_numeric_channels_values('unet_0 batch sum loss', 'unet_1 batch sum loss')
+            >>> epoch_channels = exp.get_numeric_channels_values('unet_0 epoch_val sum loss', 'Learning Rate')
 
+        Note:
+            Remember to fetch the dataframe for the channels that have a common temporal/iteration axis x.
+            For example combine epoch channels to one dataframe and batch channels to the other
         """
 
         channels_data = {}
@@ -300,14 +302,16 @@ class Experiment(object):
                 channels_data[channel_name] = pd.read_csv(
                     self._client.get_channel_points_csv(self._leaderboard_entry.internal_id, channel_id),
                     header=None,
-                    names=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
+                    names=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)],
+                    dtype=[float, float]
                 )
             except EmptyDataError:
                 channels_data[channel_name] = pd.DataFrame(
-                    columns=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
+                    columns=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)],
+                    dtype=[float, float]
                 )
 
-        return pd.concat(channels_data.values(), axis=1, sort=False)
+        return align_channels_on_x(pd.concat(channels_data.values(), axis=1, sort=False))
 
     def __str__(self):
         return 'Experiment({})'.format(self.id)
