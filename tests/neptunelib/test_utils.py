@@ -22,6 +22,7 @@ from pandas.util.testing import assert_frame_equal
 
 from neptunelib.utils import map_keys, map_values, as_list, align_channels_on_x, get_channel_name_stems, \
     merge_dataframes
+from tests.neptunelib.random_utils import sort_df_by_columns
 
 
 class TestMapValues(unittest.TestCase):
@@ -211,11 +212,6 @@ class TestSortDfByColumns(unittest.TestCase):
         shuffled_df = pd.DataFrame(columns=['c', 'a', '1', 'd', '3', '2', 'b'])
 
         assert_frame_equal(sort_df_by_columns(shuffled_df), sorted_df)
-
-
-def sort_df_by_columns(df):
-    df = df.reindex(sorted(df.columns), axis=1)
-    return df
 
 
 def times_2(x):

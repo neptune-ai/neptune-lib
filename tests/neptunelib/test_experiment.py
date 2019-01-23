@@ -18,8 +18,11 @@ from io import StringIO
 import unittest
 
 from mock import MagicMock
+import pandas as pd
+from pandas.util.testing import assert_frame_equal
 
 from neptunelib.experiment import Experiment
+from tests.neptunelib.random_utils import sort_df_by_columns
 
 
 class TestExperiment(unittest.TestCase):
@@ -37,7 +40,15 @@ class TestExperiment(unittest.TestCase):
 
         # then
         experiment = Experiment(client, leaderboard_entry)
-        experiment.get_numeric_channels_values('epoch_loss')
+        result = experiment.get_numeric_channels_values('epoch_loss')
+
+        expected_result = pd.DataFrame({'x': [0.3, 1.0],
+                                        'epoch_loss': [2.5, 2.0]}, dtype=float)
+
+        expected_result = sort_df_by_columns(expected_result)
+        result = sort_df_by_columns(result)
+
+        assert_frame_equal(expected_result, result)
 
 
 if __name__ == '__main__':
