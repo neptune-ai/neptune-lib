@@ -17,36 +17,130 @@
 import pandas as pd
 from pandas.errors import EmptyDataError
 
-from neptunelib.utils import map_values
+from neptunelib.utils import map_values, align_channels_on_x
 
 
 class Experiment(object):
+    """It contains all the information about a Neptune Experiment
+
+    This class lets you extract experiment by, short experiment id, names of all the channels,
+    system properties and other properties, parameters, numerical channel values,
+    information about the hardware utilization during the experiment
+
+    Args:
+        client(`neptunelib.Client'): Client object
+        leaderboard_entry(`neptunelib.model.LeaderboardEntry`): LeaderboardEntry object
+
+    Examples:
+        Instantiate a session.
+
+        >>> from neptunelib.session import Session
+        >>> session = Session()
+
+        Fetch a project and a list of experiments.
+
+        >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+        >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+        Get an experiment instance.
+
+        >>> experiment = experiments[0]
+        >>> experiment
+        Experiment(SAL-1609)
+
+    Todo:
+        Column sorting
+    """
+
     def __init__(self, client, leaderboard_entry):
         self._client = client
         self._leaderboard_entry = leaderboard_entry
 
-    # TODO: posortowanie kolumn
-
     @property
     def id(self):
+        """ Experiment short id
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> session = Session()
+
+            Fetch a project and a list of experiments.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+            >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+            Get an experiment instance.
+
+            >>> experiment = experiments[0]
+
+            Get experiment short id.
+
+            >>> experiment.id
+            'SAL-1609'
+
+        """
         return self._leaderboard_entry.id
 
     @property
     def system_properties(self):
-        """
-        Retrieve system properties like owner, times of creation and completion, worker type, etc.
-        Note, that the list of supported system properties changes over time.
+        """Retrieve system properties like owner, times of creation and completion, worker type, etc.
 
-        :return: A `pandas.DataFrame` containing a column for every property.
+        Returns:
+            `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> session = Session()
+
+            Fetch a project and a list of experiments.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+            >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+            Get an experiment instance.
+
+            >>> experiment = experiments[0]
+
+            Get experiment system properties.
+
+            >>> experiment.system_properties
+
+        Note:
+            The list of supported system properties may change over time.
+
         """
         return self._simple_dict_to_dataframe(self._leaderboard_entry.system_properties)
 
     @property
     def channels(self):
-        """
-        Retrieve all channel names along with their types for this experiment.
+        """Retrieve all channel names along with their types for this experiment.
 
-        :return: A dictionary mapping a channel name to its type.
+        Returns:
+            dict: A dictionary mapping a channel name to its type.
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> session = Session()
+
+            Fetch a project and a list of experiments.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+            >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+            Get an experiment instance.
+
+            >>> experiment = experiments[0]
+
+            Get experiment channels.
+
+            >>> experiment.channels
+
         """
         return dict(
             (ch.name, ch.type) for ch in self._leaderboard_entry.channels
@@ -54,25 +148,64 @@ class Experiment(object):
 
     @property
     def parameters(self):
-        """
-        Retrieve parameters for this experiment.
+        """Retrieve parameters for this experiment.
 
-        :return: A `pandas.DataFrame` containing a column for every parameter.
+        Returns:
+            `pandas.DataFrame`: Dataframe that has 1 row containing a column for every parameter.
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> session = Session()
+
+            Fetch a project and a list of experiments.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+            >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+            Get an experiment instance.
+
+            >>> experiment = experiments[0]
+
+            Get experiment parameters.
+
+            >>> experiment.parameters
+
         """
         return self._simple_dict_to_dataframe(self._leaderboard_entry.parameters)
 
     @property
     def properties(self):
-        """
-        Retrieve user-defined properties for this experiment.
+        """Retrieve user-defined properties for this experiment.
 
-        :return: A `pandas.DataFrame` containing a column for every property.
+        Returns:
+            `pandas.DataFrame`: Dataframe that has 1 row containing a column for every property.
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> session = Session()
+
+            Fetch a project and a list of experiments.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+            >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+            Get an experiment instance.
+
+            >>> experiment = experiments[0]
+
+            Get experiment properties.
+
+            >>> experiment.properties
+
         """
         return self._simple_dict_to_dataframe(self._leaderboard_entry.properties)
 
     def get_hardware_utilization(self):
-        """
-        Retrieve RAM, CPU and GPU utilization throughout the experiment.
+        """Retrieve RAM, CPU and GPU utilization throughout the experiment.
 
         The returned DataFrame contains 2 columns (x_*, y_*) for each of: RAM, CPU and each GPU.
         The x_ column contains the time (in milliseconds) from the experiment start,
@@ -91,7 +224,28 @@ class Experiment(object):
 
         The returned DataFrame may contain NaNs if one of the metrics has more values than others.
 
-        :return: A `pandas.DataFrame` containing the hardware utilization metrics throughout the experiment.
+        Returns:
+            `pandas.DataFrame`: Dataframe containing the hardware utilization metrics throughout the experiment.
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> session = Session()
+
+            Fetch a project and a list of experiments.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+            >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+            Get an experiment instance.
+
+            >>> experiment = experiments[0]
+
+            Get hardware utilization channels.
+
+            >>> experiment.get_hardware_utilization
+
         """
         metrics_csv = self._client.get_metrics_csv(self._leaderboard_entry.internal_id)
         try:
@@ -103,18 +257,42 @@ class Experiment(object):
         """
         Retrieve values of specified numeric channels.
 
-        The returned DataFrame contains 2 columns (x_*, y_*) for every requested channel.
-        The x_ and y_ columns contain the X and Y coordinate of each point in a channel respectively.
+        The returned DataFrame contains 1 additional column x along with the requested channels.
 
-        E.g. get_numeric_channels_values('loss', 'auc') will return a DataFrame
-        of the following structure:
-
-        x_loss, y_loss, x_auc, y_auc
+        E.g. get_numeric_channels_values('loss', 'auc') will return a DataFrame of the following structure:
+            x, loss, auc
 
         The returned DataFrame may contain NaNs if one of the channels has more values than others.
 
-        :param channel_names: Names of the channels to retrieve values for.
-        :return: A `pandas.DataFrame` containing the values for the requested channels.
+        Args:
+            *channel_names: variable length list of names of the channels to retrieve values for.
+
+        Returns:
+            `pandas.DataFrame`: Dataframe containing the values for the requested numerical channels.
+
+        Examples:
+            Instantiate a session.
+
+            >>> from neptunelib.session import Session
+            >>> session = Session()
+
+            Fetch a project and a list of experiments.
+
+            >>> project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
+            >>> experiments = project.get_experiments(state=['aborted'], owner=['neyo'], min_running_time=100000)
+
+            Get an experiment instance.
+
+            >>> exp = experiments[0]
+
+            Get numeric channel value for channels 'unet_0 batch sum loss' and 'unet_1 batch sum loss'.
+
+            >>> batch_channels = exp.get_numeric_channels_values('unet_0 batch sum loss', 'unet_1 batch sum loss')
+            >>> epoch_channels = exp.get_numeric_channels_values('unet_0 epoch_val sum loss', 'Learning Rate')
+
+        Note:
+            Remember to fetch the dataframe for the channels that have a common temporal/iteration axis x.
+            For example combine epoch channels to one dataframe and batch channels to the other
         """
 
         channels_data = {}
@@ -124,14 +302,16 @@ class Experiment(object):
                 channels_data[channel_name] = pd.read_csv(
                     self._client.get_channel_points_csv(self._leaderboard_entry.internal_id, channel_id),
                     header=None,
-                    names=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
+                    names=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)],
+                    dtype=[float, float]
                 )
             except EmptyDataError:
                 channels_data[channel_name] = pd.DataFrame(
-                    columns=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)]
+                    columns=['x_{}'.format(channel_name), 'y_{}'.format(channel_name)],
+                    dtype=[float, float]
                 )
 
-        return pd.concat(channels_data.values(), axis=1, sort=False)
+        return align_channels_on_x(pd.concat(channels_data.values(), axis=1, sort=False))
 
     def __str__(self):
         return 'Experiment({})'.format(self.id)

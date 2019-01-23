@@ -14,6 +14,12 @@
 # limitations under the License.
 #
 
+import functools
+
+import numpy as np
+import pandas as pd
+
+
 def map_values(f_value, dictionary):
     return dict(
         (k, f_value(v)) for k, v in dictionary.items()
@@ -31,3 +37,30 @@ def as_list(value):
         return value
     else:
         return [value]
+
+
+def align_channels_on_x(dataframe):
+    channel_dfs, common_x = _split_df_by_stems(dataframe)
+    return merge_dataframes([common_x] + channel_dfs, on='x', how='outer')
+
+
+def get_channel_name_stems(columns):
+    return list(set([col[2:] for col in columns]))
+
+
+def merge_dataframes(dataframes, on, how='outer'):
+    merged_df = functools.reduce(lambda left, right: \
+                                     pd.merge(left, right, on=on, how=how), dataframes)
+    return merged_df
+
+
+def _split_df_by_stems(df):
+    channel_dfs, x_vals = [], []
+    for stem in get_channel_name_stems(df.columns):
+        channel_df = df[['x_{}'.format(stem), 'y_{}'.format(stem)]]
+        channel_df.columns = ['x', stem]
+        channel_df.dropna(inplace=True)
+        channel_dfs.append(channel_df)
+        x_vals.extend(channel_df['x'].tolist())
+    common_x = pd.DataFrame({'x': np.unique(x_vals)}, dtype=float)
+    return channel_dfs, common_x

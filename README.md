@@ -14,13 +14,21 @@ neptune account api-token get
 ### Establish session
 
 ```python
-from neptunelib.credentials import Credentials
-credentials = Credentials(api_token=`YOUR_NEPTUNE_API_TOKEN`)
+from neptunelib.session import Session
+session = Session(api_token='YOUR_NEPTUNE_API_TOKEN')
 ```
+
+you can also create an environment variable `NEPTUNE_API_TOKEN`:
+
+```bash
+export NEPTUNE_API_TOKEN=YOUR_NEPTUNE_API_TOKEN`
+```
+
+and simpy go
 
 ```python
 from neptunelib.session import Session
-session = Session(credentials=credentials)
+session = Session()
 ```
 
 ### Instatiate a Project object
@@ -42,7 +50,8 @@ experiments = project.get_experiments(id=['SAL-2342'])
 experiment = experiments[0]
 ```
 
-1. get numeric channel values dataframe
+1. get numeric channel values dataframe.
+Lets take the `network_1 epoch_val iou loss` channel for example (long name I know).
     
 ```python
     channel_df = experiment.get_numeric_channels_values('network_1 epoch_val iou loss')
