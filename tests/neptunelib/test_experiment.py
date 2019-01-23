@@ -27,9 +27,7 @@ class TestExperiment(unittest.TestCase):
     def test_get_numeric_channels_values(self):
         # when
         client = MagicMock()
-        client.get_channel_points_csv.return_value = StringIO("""0.3,2.5
-        1,2
-        """)
+        client.get_channel_points_csv.return_value = StringIO(u'\n'.join(['0.3,2.5','1,2']))
 
         leaderboard_entry = MagicMock()
         dict_value = MagicMock()
