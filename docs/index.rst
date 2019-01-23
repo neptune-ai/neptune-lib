@@ -5,7 +5,6 @@ Welcome to Neptune Library
    :maxdepth: 2
    :caption: API Reference:
 
-   Credentials <credentials>
    Session <session>
    Project <project>
    Experiment <experiment>
