@@ -34,3 +34,7 @@ def a_string_list(length=2):
 
 def a_timestamp():
     return datetime.datetime.now()
+
+def sort_df_by_columns(df):
+    df = df.reindex(sorted(df.columns), axis=1)
+    return df
