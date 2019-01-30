@@ -6,15 +6,13 @@ See [neptune-lib documentation site](https://neptune-lib.readthedocs.io)
 
 # Getting started
 
-## Experiment Api
-
-### Get api-token
+## Get api-token
 
 ```bash
 neptune account api-token get
 ```
 
-### Establish session
+## Establish session
 
 ```python
 from neptunelib.session import Session
@@ -34,19 +32,19 @@ from neptunelib.session import Session
 session = Session()
 ```
 
-### Instatiate a Project object
+## Instatiate a Project object
 
 ```python
 project = session.get_projects('neptune-ml')['neptune-ml/Salt-Detection']
 ```
 
-### Get leaderbaord dataframe
+## Get leaderbaord dataframe
 
 ```python
 leaderboard_df = project.get_leaderboard()
 ```
 
-### Get experiment data
+## Get experiment data
 
 ```python
 experiments = project.get_experiments(id=['SAL-2342'])
