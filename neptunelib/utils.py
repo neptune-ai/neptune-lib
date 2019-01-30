@@ -59,7 +59,7 @@ def _split_df_by_stems(df):
     for stem in get_channel_name_stems(df.columns):
         channel_df = df[['x_{}'.format(stem), 'y_{}'.format(stem)]]
         channel_df.columns = ['x', stem]
-        channel_df.dropna(inplace=True)
+        channel_df = channel_df.dropna()
         channel_dfs.append(channel_df)
         x_vals.extend(channel_df['x'].tolist())
     common_x = pd.DataFrame({'x': np.unique(x_vals)}, dtype=float)
