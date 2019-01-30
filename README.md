@@ -1,5 +1,8 @@
-# Python lib
+# neptune-lib
 [![Build Status](https://travis-ci.org/neptune-ml/neptune-lib.svg?branch=master)](https://travis-ci.org/neptune-ml/neptune-lib)
+
+# Documentation
+See [neptune-lib documentation site](https://neptune-lib.readthedocs.io)
 
 # Getting started
 
@@ -83,7 +86,7 @@ pip install neptune-lib
 If you get stuck, don't worry we are here to help.
 The best order of communication is:
 
- * [neptune-lib readthecocs](https://neptune-lib.readthedocs.io/en/0.1.0/)
+ * [neptune-lib readthecocs](https://neptune-lib.readthedocs.io)
  * [neptune community forum](https://community.neptune.ml/)
  * [neptune community slack](https://neptune-community.slack.com) (join by going [here](https://join.slack.com/t/neptune-community/shared_invite/enQtNTI4Mjg3ODk2MjQwLWE5YjI0YThiODViNDY4MDBlNmRmZTkwNTE3YzNiMjQ5MGM2ZTFhNzhjN2YzMTIwNDM3NjQyZThmMDk1Y2Q1ZjY))
  * Github issues
