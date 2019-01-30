@@ -1,0 +1,8 @@
+oauthlib
+PyJWT
+requests>=2.20.0
+requests-oauthlib>=1.0.0
+pandas
+bravado
+nbsphinx==0.4.2
+sphinx-rtd-theme==0.4.2
