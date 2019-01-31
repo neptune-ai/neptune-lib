@@ -45,7 +45,6 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
     'nbsphinx',
-    'edit_on_github',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -188,5 +187,3 @@ epub_exclude_files = ['search.html']
 # -- Extension configuration -------------------------------------------------
 nbsphinx_allow_errors = True
 nbsphinx_execute = 'never'
-edit_on_github_project = 'neptune-ml/neptune-lib'
-edit_on_github_branch = 'master'
