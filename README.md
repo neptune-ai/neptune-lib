@@ -1,3 +1,6 @@
+# Note
+**DEPRECATED use [neptune-client](https://github.com/neptune-ml/neptune-client) instead.** 
+
 # neptune-lib
 [![Build Status](https://travis-ci.org/neptune-ml/neptune-lib.svg?branch=master)](https://travis-ci.org/neptune-ml/neptune-lib)
 
